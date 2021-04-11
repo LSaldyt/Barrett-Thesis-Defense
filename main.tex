@@ -16,13 +16,8 @@
 \DeclareMathOperator*{\argmin}{\arg\!\min}
 \DeclareMathOperator*{\argmax}{\arg\!\max}
 
-% \usetheme[nofooter, darkmode]{pureminimalistic}
-% \usetheme[nofooter]{pureminimalistic}
-% \usetheme[nofooter]{pureminimalistic}
 \usetheme[showmaxslides, darkmode]{pureminimalistic}
 
-% \usepackage[backend=biber,style=apa,autocite=inline]{biblatex}
-% \usepackage[american]{babel}
 \usepackage[american]{babel}
 \usepackage{csquotes}
 \usepackage[style=apa, backend=biber]{biblatex}
@@ -40,6 +35,7 @@
 \renewcommand{\logotitle}{\includegraphics[width=.2\linewidth]{logos/asu_logo_alt.png}}
 \renewcommand{\logoheader}{}
 \renewcommand{\logofooter}{\includegraphics[width=.15\linewidth]{logos/asu_logo_alt.png}}
+\renewcommand{\emph}[1]{{\Huge \color{pureminimalistic@text@red} #1}}
 
 \definecolor{m1}{RGB}{30, 76, 214}
 \definecolor{m2}{RGB}{161, 3, 74}
@@ -48,20 +44,20 @@
 \definecolor{m5}{RGB}{3, 171, 34}
 \definecolor{grey}{RGB}{130, 130, 130}
 
-% if loaded after begin{document} a warning will appear: "pdfauthor already used"
-\title[Learning Diverse Programs]{Lifelong Learning for Path-Planning via Genetic Programming}
+\title[Lifelong Learning for Planning]{Lifelong Learning for Robot Path-Planning}
 \author{Lucas Saldyt}
 \institute{Arizona State University} 
 \date{\today}
 
 \begin{document}
-% has to be loaded outside of a frame to work!
+
+% Hello, I'm Lucas, and today I'll be presenting  "Lifelong Learning for Robot Path Planning"
 \maketitle
 
 \begin{frame}[plain]
-  % This is a robot.
-  % This particular robot was designed for mars.
-  % This design was done by hand, with high reliability in mind
+  % This thesis focuses on environmental adaptation in robots.
+  % An example robot is NASA's Perseverance rover, which was custom-engineered for mars.
+  % Because of resource constraints and a desire for reliability, this rover doesn't use machine learning directly
   \begin{figure}
   \centering
   \vspace*{-1em}
@@ -71,9 +67,11 @@
 \end{frame}
 
 \begin{frame}[plain]
-  % This is the surface of mars
-  % It represents a very unique environment
-  
+  % Instead, the rover uses an engineered navigation algorithm, or is even controlled directly.
+  % As an environment, Mars offers unique challenges.
+  % For example, rocks can puncture the rover's wheels and sand can trap the rover.
+  % The rover relies on a combination of on-board and satellite based sensor data, which is often imperfect.
+  % Also, low-latency direct human control is impossible.
   \begin{figure}
   \centering
   \vspace*{-1em}
@@ -83,6 +81,14 @@
 \end{frame}
 
 \begin{frame}[plain]
+  % Alternatively, consider an environment like an Amazon warehouse.
+  % In contrast to mars, it is easy to navigate.
+  % The floor is perfectly smooth, the environment is mapped almost perfectly.
+  % Communication is fast, and it is easier integrate advanced machine learning algorithms with robots.
+  % However, in an environment like this, there can be multiple robots, or even human-robot interaction.
+  % So, robots must plan carefully to avoid dangerous collisions.
+  % (pause)
+  % Considering these differences two example environments brings us to the main problem of this thesis.
   \begin{figure}
   \centering
   \vspace*{-1em}
@@ -91,25 +97,25 @@
   \end{figure}
 \end{frame}
 
-\begin{frame}[plain]{{\color{pureminimalistic@text@white} Core Goals \& Concepts}}
+\begin{frame}{{\color{pureminimalistic@text@white} Core Goals \& Concepts}}
+  % Conceptually, the focus of this thesis is on life-long robot learning.
+  %   
   \begin{columns}[T]
       \begin{column}{.6\linewidth}
           \begin{vfilleditems}
-            \item {\Huge \color{pureminimalistic@text@red} Learning}
+            \item \emph{Learning}
               \begin{itemize}
-                \item {\Medium Flexibility}
+                \item {\Medium Flexibility: adapt to new tasks}
               \end{itemize}
-            \item {\Huge \color{pureminimalistic@text@red} Specialization}
+            \vspace{1em}
+            \item \emph{Specialization}
               \begin{itemize}
-                \item {\Medium Learn specific environment details?}
+                \item {\Medium Learn environment details?}
               \end{itemize}
-            \item {\Huge \color{pureminimalistic@text@red} Generalization}
+            \vspace{1em}
+            \item \emph{Generalization}
               \begin{itemize}
-                \item {\Medium Learn general task proficiency?}
-              \end{itemize}
-            \item {\Huge \color{pureminimalistic@text@red} Curiosity}
-              \begin{itemize}
-                \item {\Medium Learn simply to explore efficiently?}
+                \item {\Medium Learn overall task proficiency?}
               \end{itemize}
           \end{vfilleditems}
       \end{column}
@@ -117,36 +123,47 @@
           \begin{figure}
               \centering
               \caption{Where is this image from?}
-              \includegraphics[height=5.5cm, keepaspectratio]{figures/i_think.png}
-              \caption{"I think"}
+              \includegraphics[height=5cm, keepaspectratio]{figures/i_think.png}
               \label{fig:my_label}
           \end{figure}
       \end{column}
   \end{columns}
 \end{frame}
 
+{
+\setbeamercolor{background canvas}{bg=white}
 \begin{frame}[plain]
   \begin{figure}
-  \vspace*{-2em}
-  \hspace*{-3em}
   \centering
-  \includegraphics[width=1.17\linewidth,keepaspectratio]{figures/tree_of_life.png}
+  \includegraphics[width=1.0\linewidth,keepaspectratio]{figures/tree_of_life.png}
   \end{figure}
-  {\color{pureminimalistic@text@red} \Huge Natural evolution}
+  \begin{center}
+      \emph{Natural evolution}
+  \end{center}
 \end{frame}
+}
 
 \begin{frame}[plain]
   \begin{figure}
   \centering
-  \includegraphics[width=1.0\linewidth,keepaspectratio]{figures/mutation_tree_starcraft_enigma_nsga2.pdf}
+  \includegraphics[width=1.0\linewidth,keepaspectratio]{figures/tree.pdf}
   \end{figure}
-  {\color{pureminimalistic@text@red} \Huge Example Phylogenetic Tree}
+  \begin{center}
+  \emph{Evolved Computer Programs}
+  \end{center}
 \end{frame}
+
+% This thesis focuses *specifically* on path-planning.
+% Originally, it focused on graph-based planning, such as A*, DFS, BFS
+% However, it has moved towards sampling-based planning, such as RRT* variants.
+% These are more common on real-world problems,
+%   and also have more variants
 
 \begin{frame}[plain]{Problems Considered}
   \begin{columns}[T]
       \begin{column}{.5\linewidth}
-          \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/baldurs_rrt_one_off.pdf}
+          % \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/baldurs_rrt_one_off.pdf}
+          \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/one_off.pdf}
       \end{column}
       \begin{column}{.5\linewidth}
           {\Huge Path Planning}
@@ -156,6 +173,8 @@
               \item {\Large Sample-based \Medium (left)}
               \vspace{1em}
               \item {\color{grey} {\Large Dynamic}}
+              \vspace{1em}
+              \item {\color{grey} {\Large Multi-agent}}
           \end{vfilleditems}
           \vspace{1em}
           {\color{grey} {\Large Symbolic Regression}}
@@ -165,12 +184,41 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}[plain]{Graph-based search (Paris)}
-    \includegraphics[height=0.9\textheight, keepaspectratio]{figures/paris_graph_based.pdf}
+\begin{frame}[plain]{Graph-based search (New York)}
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/ny_graph_based.png}
 \end{frame}
 
 \begin{frame}[plain]{Graph-based search (New York)}
-    \includegraphics[height=0.9\textheight, keepaspectratio]{figures/ny_graph_based.png}
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/ny_graph_based_geodesic.png}
+\end{frame}
+
+\begin{frame}[plain]{Graph-based search (Paris)}
+  \begin{columns}[T]
+      \begin{column}{.4\linewidth}
+          \begin{vfilleditems}
+              \item {\Large Breadth-first search (BFS)}
+              \item {\Large Depth-first search (DFS)}
+              \item {\Large A* variants}
+          \end{vfilleditems}
+      \end{column}
+      \begin{column}{.6\linewidth}
+      \includegraphics[height=0.9\textheight, keepaspectratio, trim={4cm 0 30cm 0}, clip ]{figures/paris_graph_based.pdf}
+      \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[plain]{Node-based search (Baldur's Gate)}
+  \begin{columns}[T]
+      \begin{column}{.6\linewidth}
+      \includegraphics[height=0.9\textheight, keepaspectratio]{figures/baldurs_rrt_one_off.pdf}
+      \end{column}
+      \begin{column}{.4\linewidth}
+          \begin{vfilleditems}
+              \item {\Large Rapidly Exploring Random Trees}
+              \item {\Large Probabilistic Roadmaps}
+          \end{vfilleditems}
+      \end{column}
+  \end{columns}
 \end{frame}
 
 \begin{frame}{Maps {\Medium \color{white}( \cite{sturtevant2012benchmarks})}}
@@ -185,6 +233,65 @@
     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned.pdf}
 \end{frame}
 
+\begin{frame}{{\color{pureminimalistic@text@white} Multiple Objectives}}
+  \begin{columns}[T]
+      \begin{column}{.4\linewidth}
+          \begin{vfilleditems}
+              \item \emph{Nodes}
+              \item \emph{Path Length}
+          \end{vfilleditems}
+      \end{column}
+      \begin{column}{.6\linewidth}
+      \includegraphics[width=0.9\linewidth, keepaspectratio]{figures/total_overview.pdf}
+      \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{{Pareto Fronts}}
+  \begin{columns}[T]
+      \begin{column}{.4\linewidth}
+          \begin{vfilleditems}
+              \item {\Huge Trade-offs}
+          \end{vfilleditems}
+      \end{column}
+      \begin{column}{.6\linewidth}
+      \includegraphics[width=0.9\linewidth, keepaspectratio]{figures/total_pareto_overview.pdf}
+      \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Pareto Evolution}
+    \begin{vfilleditems}
+        \item Why was it chosen?
+        \item How does it work?
+    \end{vfilleditems}
+\end{frame}
+
+\begin{frame}{Pareto Evolution}
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/paretoev.pdf}
+\end{frame}
+
+\begin{frame}{Population Dynamics: Starcraft Engima}
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/pheno.pdf}
+\end{frame}
+
+\begin{frame}{Population Dynamics: Baldur's Gate}
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/baldurs_pheno_60.pdf}
+\end{frame}
+
+\appendix % do not count the following slides for the total number
+\section*{Backup Slides}
+\begin{frame}[plain, noframenumbering]
+  \centering
+  \vfill
+  {\fontsize{40}{50}\selectfont Questions?}
+  \vfill
+\end{frame}
+
+\begin{frame}[plain, noframenumbering]
+  \centering
+  \printbibliography
+\end{frame}
 
 \begin{frame}[plain]{Thesis}
     \begin{vfilleditems}
@@ -219,57 +326,8 @@
   \end{vfilleditems}
 \end{frame}
 
-\begin{frame}[plain]{On Bio-inspiration}
-    \begin{vfilleditems}
-      \item {\Medium Genetic programming is at best an analogy}
-      \item {\Medium Many bio-inspired algorithms are simply inspired}
-    \end{vfilleditems}
-\end{frame}
-
-\begin{frame}
-    \item {\Huge Engineering has a huge role in ML algorithm success}
-    \item {\Huge So: Genetic Programming}
-      \begin{itemize}
-        \item {\Medium Models environments naturally}
-        \item {\Medium Highly interpretable}
-      \end{itemize}
-\end{frame}
-
-
-\begin{frame}{History}
-  \begin{columns}[T]
-      \begin{column}{.5\linewidth}
-          \begin{vfilleditems}
-              \item {\Large Genetic algorithms first invented in 1960s}
-              \vspace{1em}
-              \item {\Large Recently surfaced for neural architecture meta-learning}
-          \end{vfilleditems}
-      \end{column}
-      \begin{column}{.5\linewidth}
-          \begin{vfilleditems}
-              \includegraphics[width=6cm, keepaspectratio]{figures/genetic.jpg}
-          \end{vfilleditems}
-      \end{column}
-  \end{columns}
-\end{frame}
-
-% \item {\Huge \color{pureminimalistic@text@red} No Free Lunch}
-%   \begin{itemize}
-%     \item {\Medium Across all domains, algorithms are equal}
-%   \end{itemize}
-
-\appendix % do not count the following slides for the total number
-\section*{Backup Slides}
-\begin{frame}[plain, noframenumbering]
-  \centering
-  \vfill
-  {\fontsize{40}{50}\selectfont Questions?}
-  \vfill
-\end{frame}
-
-\begin{frame}[plain, noframenumbering]
-  \centering
-  \printbibliography
+\begin{frame}{Population Dynamics: Baldur's Gate}
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/baldurs_pheno_50.pdf}
 \end{frame}
 
 \end{document}
