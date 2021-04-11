@@ -12,6 +12,7 @@
 \usepackage{tikz}
 \usepackage{amsmath}
 \usepackage[export]{adjustbox}
+\usepackage[percent]{overpic}
 
 \DeclareMathOperator*{\argmin}{\arg\!\min}
 \DeclareMathOperator*{\argmax}{\arg\!\max}
@@ -36,6 +37,8 @@
 \renewcommand{\logoheader}{}
 \renewcommand{\logofooter}{\includegraphics[width=.15\linewidth]{logos/asu_logo_alt.png}}
 \renewcommand{\emph}[1]{{\Huge \color{pureminimalistic@text@red} #1}}
+\renewcommand{\white}[1]{{\color{pureminimalistic@text@white} #1}}
+\renewcommand{\red}[1]{{\color{pureminimalistic@text@red} #1}}
 
 \definecolor{m1}{RGB}{30, 76, 214}
 \definecolor{m2}{RGB}{161, 3, 74}
@@ -88,7 +91,7 @@
   % However, in an environment like this, there can be multiple robots, or even human-robot interaction.
   % So, robots must plan carefully to avoid dangerous collisions.
   % (pause)
-  % Considering these differences two example environments brings us to the main problem of this thesis.
+  % Considering these differences between Mars and a warehouse brings us to the main goal of this thesis.
   \begin{figure}
   \centering
   \vspace*{-1em}
@@ -97,34 +100,39 @@
   \end{figure}
 \end{frame}
 
-\begin{frame}{{\color{pureminimalistic@text@white} Core Goals \& Concepts}}
+\begin{frame}{\white{Core Goals \& Concepts}}
   % Conceptually, the focus of this thesis is on life-long robot learning.
-  %   
+  %     Modern artificial intelligence is trying to move away from custom-engineering
+  %     In the context of this paper, this means teaching robots to be generally proficient.
+  %     But most importantly, this thesis focuses on the potential to specialize robots to particular environments.
+  % (pause)
+  % On the right, we have an image which I think is quite beautiful.
+  % This is a sketch from Darwin's notebook, presumably from when he first thought of evolution.
+  % It shows a tree depicting common ancestry.
   \begin{columns}[T]
-      \begin{column}{.6\linewidth}
-          \begin{vfilleditems}
+      \begin{column}{.5\linewidth}
+            \vspace{-0.7em}
             \item \emph{Learning}
               \begin{itemize}
                 \item {\Medium Flexibility: adapt to new tasks}
-              \end{itemize}
-            \vspace{1em}
-            \item \emph{Specialization}
-              \begin{itemize}
-                \item {\Medium Learn environment details?}
               \end{itemize}
             \vspace{1em}
             \item \emph{Generalization}
               \begin{itemize}
                 \item {\Medium Learn overall task proficiency?}
               \end{itemize}
-          \end{vfilleditems}
+            \vspace{1em}
+            \item \emph{Specialization}
+              \begin{itemize}
+                \item {\Medium Learn environment details?}
+              \end{itemize}
       \end{column}
-      \begin{column}{.4\linewidth}
+      \begin{column}{.5\linewidth}
           \begin{figure}
               \centering
+              \includegraphics[height=5.5cm, keepaspectratio]{figures/i_think.png}
               \caption{Where is this image from?}
-              \includegraphics[height=5cm, keepaspectratio]{figures/i_think.png}
-              \label{fig:my_label}
+              \label{fig:i_think}
           \end{figure}
       \end{column}
   \end{columns}
@@ -133,6 +141,12 @@
 {
 \setbeamercolor{background canvas}{bg=white}
 \begin{frame}[plain]
+  % This is an artist's depiction of the tree of life,
+  % In particular, it shows how specialization occurred over time.
+  % Bacteria have the oldest common ancestry.
+  % Mammals, on the other hand, are the most recent, and fill a vastly different niche.
+  % In between, there are incredibly diverse species of plants, fungi, fish, reptiles, and birds.
+  % This has led to at least 8.7 million species on earth
   \begin{figure}
   \centering
   \includegraphics[width=1.0\linewidth,keepaspectratio]{figures/tree_of_life.png}
@@ -144,6 +158,8 @@
 }
 
 \begin{frame}[plain]
+  % Ideally, this thesis would achieve the same specialization, but with robots instead of biological species.
+  % In this slide is a teaser figure showing an ancestry tree approximating that of natural species.
   \begin{figure}
   \centering
   \includegraphics[width=1.0\linewidth,keepaspectratio]{figures/tree.pdf}
@@ -153,20 +169,19 @@
   \end{center}
 \end{frame}
 
-% This thesis focuses *specifically* on path-planning.
-% Originally, it focused on graph-based planning, such as A*, DFS, BFS
-% However, it has moved towards sampling-based planning, such as RRT* variants.
-% These are more common on real-world problems,
-%   and also have more variants
-
-\begin{frame}[plain]{Problems Considered}
+\begin{frame}[plain]{\white{Problems Considered}}
+  % However, the scope of this thesis is *specifically* on path-planning environments.
+  % Path planning is the task of finding a sequence of moves between points in space.
+  % Originally, this thesis focused on graph-based planning, where possible moves are specified in advance.
+  % However, it has moved towards sampling-based planning, where possible moves are gathered by probing the environment.
+  % The methods describes in this thesis work just as well dynamic or multi-agent planning, but these are left for future work.
+  % They also have strong relations to symbolic regression or neural architecture search.
   \begin{columns}[T]
       \begin{column}{.5\linewidth}
-          % \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/baldurs_rrt_one_off.pdf}
           \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/one_off.pdf}
       \end{column}
       \begin{column}{.5\linewidth}
-          {\Huge Path Planning}
+          \emph{Path Planning}
           \begin{vfilleditems}
               \item {\Large Graph-based}
               \vspace{1em}
@@ -184,53 +199,95 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}[plain]{Graph-based search (New York)}
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/ny_graph_based.png}
+\begin{frame}[plain]{Graph-based search \white{(New York)}}
+    % This image shows the behavior of a graph-based path planner on a map of New York.
+    % A planning algorithm is asked to find a route from the bottom of New York to the top of New York
+    % Pink indicates roads that were considered
+    % Blank indicates unconsidered roads
+    % Yellow indicates the optimal path
+    \includegraphics[width=1.0\linewidth, keepaspectratio, trim={0cm, 2cm, 1cm, 0.5cm}, clip]{figures/ny_graph_based.png}
 \end{frame}
 
-\begin{frame}[plain]{Graph-based search (New York)}
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/ny_graph_based_geodesic.png}
+\begin{frame}[plain]{Graph-based search \white{(New York)}}
+    % As this shows, the choice of algorithm can be a difference of millions of nodes
+    \includegraphics[width=1.0\linewidth, keepaspectratio, trim={0.5cm 1.5cm 0 2.5cm}, clip]{figures/ny_graph_based_geodesic.png}
 \end{frame}
 
-\begin{frame}[plain]{Graph-based search (Paris)}
+\begin{frame}[plain]{Graph-based Algorithms (Kiev, Ukraine)}
   \begin{columns}[T]
       \begin{column}{.4\linewidth}
           \begin{vfilleditems}
-              \item {\Large Breadth-first search (BFS)}
-              \item {\Large Depth-first search (DFS)}
-              \item {\Large A* variants}
+              \item {\Large Breadth-first (BFS)}
+              \item {\Large Depth-first (DFS)}
+              \item {\Large Dijkstra/A*}
+              \vspace{1em}
+              {\color{grey}
+              \item {\Large Goal-directed}
+              \item {\Large Separator-based}
+              \item {\Large Hierarchical}
+              \item {\Large Bounded Hop}
+              \item {\Large Hybrid Techniques}
+              \vspace{1em}
+              }
+              \item \red{\Large \cite{bast2016route}}
           \end{vfilleditems}
       \end{column}
       \begin{column}{.6\linewidth}
-      \includegraphics[height=0.9\textheight, keepaspectratio, trim={4cm 0 30cm 0}, clip ]{figures/paris_graph_based.pdf}
+      \includegraphics[height=0.9\textheight, keepaspectratio, trim={5cm 3cm 12cm 2cm}, clip]{figures/kiev.png}
       \end{column}
   \end{columns}
 \end{frame}
 
-\begin{frame}[plain]{Node-based search (Baldur's Gate)}
+\begin{frame}[plain]{Sampling-based search \white{(Baldur's Gate)}}
   \begin{columns}[T]
-      \begin{column}{.6\linewidth}
-      \includegraphics[height=0.9\textheight, keepaspectratio]{figures/baldurs_rrt_one_off.pdf}
-      \end{column}
       \begin{column}{.4\linewidth}
+      \includegraphics[height=0.8\textheight, keepaspectratio]{figures/baldurs_rrt_one_off.pdf}
+      \end{column}
+      \begin{column}{.6\linewidth}
           \begin{vfilleditems}
-              \item {\Large Rapidly Exploring Random Trees}
-              \item {\Large Probabilistic Roadmaps}
+              \item {\Large Rapidly Exploring Random Trees \red{(RRTs)}}
+              \vspace{1em}
+              \item {\Large Probabilistic Road Maps \red{(PRMs)}}
           \end{vfilleditems}
       \end{column}
   \end{columns}
+\end{frame}
+
+\begin{frame}{Maps (Overview)}
+    \includegraphics[width=0.95\linewidth, keepaspectratio]{figures/show_maps_overview.pdf}
 \end{frame}
 
 \begin{frame}{Maps {\Medium \color{white}( \cite{sturtevant2012benchmarks})}}
     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/show_maps.pdf}
 \end{frame}
 
-\begin{frame}{Maps (Overview)}
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/show_maps_overview.pdf}
-\end{frame}
-
 \begin{frame}{Outcomes}
     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned.pdf}
+\end{frame}
+
+\begin{frame}{More Variants and Results!!!!}
+    \centering
+    \vfill
+    {\fontsize{40}{50}\selectfont Core Results Here}
+    \vfill
+\end{frame}
+
+\begin{frame}{Efficient Exploration}
+    \centering
+    \includegraphics[width=0.85\linewidth, keepaspectratio]{figures/efficient_overview.pdf}
+\end{frame}
+
+\begin{frame}{Talk About Google Paper}
+    \centering
+    \vfill
+    {\fontsize{40}{50}\selectfont Quick Review?}
+    \vfill
+\end{frame}
+
+\begin{frame}{\white{Algorithm Choice:} \red{Pareto Evolution}}
+    \begin{vfilleditems}
+        \item \emph{Alternatives:}
+    \end{vfilleditems}
 \end{frame}
 
 \begin{frame}{{\color{pureminimalistic@text@white} Multiple Objectives}}
@@ -238,7 +295,14 @@
       \begin{column}{.4\linewidth}
           \begin{vfilleditems}
               \item \emph{Nodes}
+              \vspace{1em}
               \item \emph{Path Length}
+              \vspace{1em}
+              \item {\Huge Convex Hull}
+              \vspace{1em}
+              \item {\Huge \% Area}
+              \vspace{1em}
+              \item {\Huge Etc}
           \end{vfilleditems}
       \end{column}
       \begin{column}{.6\linewidth}
@@ -251,7 +315,9 @@
   \begin{columns}[T]
       \begin{column}{.4\linewidth}
           \begin{vfilleditems}
-              \item {\Huge Trade-offs}
+              \item {\Large Vectorized Fitness}
+              \vspace{1em}
+              \newline {\Large $v$ = $\{60, 155\}$}
           \end{vfilleditems}
       \end{column}
       \begin{column}{.6\linewidth}
@@ -260,15 +326,13 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Pareto Evolution}
-    \begin{vfilleditems}
-        \item Why was it chosen?
-        \item How does it work?
-    \end{vfilleditems}
-\end{frame}
 
 \begin{frame}{Pareto Evolution}
     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/paretoev.pdf}
+\end{frame}
+
+\begin{frame}{Population Dynamics: Starcraft Engima}
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/early_pheno.pdf}
 \end{frame}
 
 \begin{frame}{Population Dynamics: Starcraft Engima}
@@ -279,14 +343,29 @@
     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/baldurs_pheno_60.pdf}
 \end{frame}
 
+\begin{frame}{Strong Ending}
+    \centering
+    \vfill
+    {\fontsize{40}{50}\selectfont Final Figure and Remarks}
+    \vfill
+\end{frame}
+
 \appendix % do not count the following slides for the total number
 \section*{Backup Slides}
+
 \begin{frame}[plain, noframenumbering]
   \centering
   \vfill
   {\fontsize{40}{50}\selectfont Questions?}
   \vfill
 \end{frame}
+
+\begin{frame}[plain, noframenumbering]{Test}
+\begin{overpic}[width=1.0\textwidth,grid,tics=10]{figures/perseverance.jpg}
+ \put (20,85) {\huge$\displaystyle\gamma$}
+\end{overpic}
+\end{frame}
+
 
 \begin{frame}[plain, noframenumbering]
   \centering
@@ -328,6 +407,13 @@
 
 \begin{frame}{Population Dynamics: Baldur's Gate}
     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/baldurs_pheno_50.pdf}
+\end{frame}
+
+\begin{frame}{Notes}
+
+There is no “silver bullet” algorithm for solving all path planning problems and heuristics that lead to massive speed-up in one scenario might be detrimental in others. Also, algorithmic parameters are mostly ad-hoc and correctly tuning them to a specific environment might drastically increase performance.
+
+- Nikolaus Correll
 \end{frame}
 
 \end{document}
