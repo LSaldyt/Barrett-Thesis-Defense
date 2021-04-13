@@ -48,11 +48,15 @@
 \definecolor{c5}{RGB}{3, 171, 34}
 \definecolor{grey}{RGB}{130, 130, 130}
 
-\newcommand{m1}[1]{\color{c1}#1}
-\newcommand{m2}[1]{\color{c1}#1}
-\newcommand{m3}[1]{\color{c1}#1}
-\newcommand{m4}[1]{\color{c1}#1}
-\newcommand{m5}[1]{\color{c1}#1}
+\newcommand{\ca}[1]{{\color{c1} #1}}
+\newcommand{\cb}[1]{{\color{c2} #1}}
+\newcommand{\cc}[1]{{\color{c3} #1}}
+\newcommand{\cd}[1]{{\color{c5} #1}}
+\newcommand{\ce}[1]{{\color{c4} #1}}
+\newcommand{\gr}[1]{{\color{grey} #1}}
+
+\definecolor{code}{RGB}{52, 219, 235}
+\newcommand{\plnr}[1]{{\color{code}$#1$}}
 
 \title[Lifelong Learning for Planning]{Lifelong Learning for Robot Path-Planning}
 \author{Lucas Saldyt}
@@ -111,7 +115,7 @@
 \begin{frame}{\white{Core Goals \& Concepts}}
   % Conceptually, the focus of this thesis is on life-long robot learning.
   %     Modern artificial intelligence is trying to move away from custom-engineering
-  %     In the context of this paper, this means teaching robots to be generally proficient.
+  %     In the context of this thesis, this means teaching robots to be generally proficient.
   %     But most importantly, this thesis focuses on the potential to specialize robots to particular environments.
   % (pause)
   % On the right, we have an image which I think is quite beautiful.
@@ -165,9 +169,18 @@
 \end{frame}
 }
 
+\begin{frame}[plain]{}
+  % Ideally, this thesis would achieve the same specialization, but with computer programs instead of biological species.
+  % Doing this is known as Evolutionary Programming
+  \centering
+  \vfill
+  \red{\fontsize{40}{50}\selectfont Computer Programs instead of species}
+  \vfill
+  \Huge Evolutionary Programming
+\end{frame}
+
 \begin{frame}[plain]
-  % Ideally, this thesis would achieve the same specialization, but with robots instead of biological species.
-  % In this slide is a teaser figure showing an ancestry tree approximating that of natural species.
+  % In this slide is a teaser figure showing an ancestry tree, where programs have evolved for special tasks.
   \begin{figure}
   \centering
   \includegraphics[width=1.0\linewidth,keepaspectratio]{figures/tree.pdf}
@@ -177,19 +190,11 @@
   \end{center}
 \end{frame}
 
-\begin{frame}[plain]{}
-  \centering
-  \vfill
-  \red{\fontsize{40}{50}\selectfont Computer Programs instead of species}
-  \vfill
-  \Huge Evolutionary Programming
-\end{frame}
-
 \begin{frame}[plain]{\white{Problems Considered}}
-  % The types of computer programs that we consider are *Path Planners*
+  % In particular, the task this thesis considers is *Path Planning*
   % Path planning is the task of finding a sequence of moves between points in space.
   % For example, on the left is a 2 dimensional map of Milan, Italy, and a robot has been tasked with finding a path between the Orange dot and the Purple dot.
-  % Originally, this thesis focused on graph-based planning, where possible moves are specified in advance.
+  % Originally, this thesis focused on graph-based planning, where possible moves are specified in advance, in the form of a discrete graph.
   % However, it has moved towards sampling-based planning, where possible moves are gathered by probing the environment.
   % The methods describes in this thesis work just as well dynamic (Mars) or multi-agent planning (Amazon), but these are left for future work. 
   % They also have strong relations to symbolic regression or neural architecture search.
@@ -230,15 +235,17 @@
 
 \begin{frame}[plain]{Graph search w/ A* \white{(New York)}}
     % However, the choice of algorithm can be a difference of millions of nodes
-    % This algorithm is A* with a geodesic heuristic, i.e. with knowledge about how far from the goal each road is.
+    % This algorithm is A* with a geodesic heuristic.
+    % This means the algorithm knows a lower bound on how far it is from the goal at any time.
     \includegraphics[width=1.0\linewidth, keepaspectratio, trim={0.5cm 1.5cm 0 2.5cm}, clip]{figures/ny_graph_based_geodesic.png}
 \end{frame}
 
 \begin{frame}[plain]{Graph-based Algorithms \white{(Kiev, Ukraine)}}
-  % In this thesis, I focus on four relatively simple algorithms.
+  % The graph-based portion of this thesis considered four relatively simple algorithms.
   % These are Breadth first search, depth first search, Dijkstra's algorithm, and A* and its variants.
   % If people are interested in more advanced algorithms, Hannah Bast of the University of Frieberg has an amazing paper on the subject.
   % When using a service like Google Maps, it is more likely that it uses one of these more advanced algorithms.
+  % However, I leave these for future and ongoing work.
   \begin{columns}[T]
       \begin{column}{.4\linewidth}
           \begin{vfilleditems}
@@ -264,8 +271,11 @@
 \end{frame}
 
 \begin{frame}[plain]{Sampling-based search \white{(Baldur's Gate)}}
-  % Next, there are sampling-based algorithms, which work by randomly selecting points in space.
-  % 
+  % Next, there are sampling-based algorithms, which work by randomly sampling points in space.
+  % There are two main variants: Rapidly exploring random trees and probabilistic road-maps
+  % RRTs by far have the most variants, all of which address different conditions, like goal direction, a large amount of constrains, or a dynamic environment.
+  % Probabilistic road maps, on the other hand, (TODO)
+  % I focus mostly on simple RRT* variants
   \begin{columns}[T]
       \begin{column}{.35\linewidth}
       \vspace{0.05\textheight}
@@ -275,15 +285,14 @@
           \begin{vfilleditems}
               \item {\Large Rapidly Exploring Random Trees \red{(RRTs)}}
               \begin{itemize}
-                  \item RRT*
-                  \item Informed RRT*
-                  \item Constrained (Multi-phase, RRT-Blossom)
+                  \item RRT, RRT*, Informed RRT*
+                  \item Multi-phase
+                  \item RRT-Blossom
                   \item Dynamic RRT* (RT-RRT*, RRTX, RRT#)
               \end{itemize}
               \vspace{1em}
               \item {\Large Probabilistic Road Maps \red{(PRMs)}}
-              \vspace{1em}
-              \item {\Large \color{grey} Potential Fields}
+              % \item {\Large \color{grey} Potential Fields}
           \end{vfilleditems}
       \end{column}
   \end{columns}
@@ -331,7 +340,7 @@
       \end{column}
       \begin{column}{.4\linewidth}
       \epigraph{
-      There is no “silver bullet” algorithm for solving all path planning problems. Heuristics that lead to massive speed-up in one scenario might be detrimental in others. Also, algorithmic parameters are mostly ad-hoc and correctly tuning them to a specific environment might drastically increase performance.
+      There is no “silver bullet” algorithm for solving all path planning problems. Heuristics that lead to massive speed-up in one scenario might be detrimental in others. Also, algorithmic parameters are mostly ad-hoc and correctly tuning them to a \red{specific environment} might drastically increase performance.
       }{\textit{
       Nikolaus Correll
       }}
@@ -344,17 +353,146 @@
     % This experiment looked at five different scenarios:
     %   Milan, Italy, (in the top left) which is a relatively cluttered map
     %   A blank map   (in the bottom right) which is intentionally open and easy to specialize to.
-    %   Three starcraft maps: Enigma, Turbo, and Entanglement.
-    %   Milan and the blank map are meant to be controls,
-    %     while the starcraft maps are the main experiment.
+    % Three starcraft maps: Enigma, Turbo, and Entanglement.
+    % Milan and the blank map are meant to be controls,
+    %   while the starcraft maps are the main experiment.
+    
+    % Each experiment evolves a population of computer programs which are evaluated on several problems on a single map.
+    % In the methods section, I'll explain how this evolution happens in-depth.
+    
     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned.pdf}
 \end{frame}
 
-\begin{frame}[plain, noframenumbering]
+\begin{frame}{Milan}
+    % On the Milan map, the best planner learned *NOT* to bias towards the goal,
+    % And instead learned to take very large steps.
+    % The worst Milan planner was one which takes very small steps, but eventually covers the search space very evenly.
+    % Next, there is the best planner on the Enigma map, in the bottom left. 
+    % This planner biases towards the goal 7/8 of the time, and considers 74.87% fewer nodes than the baseline planner.
+    
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned_split_0.pdf}
+\end{frame}
+
+\begin{frame}{Enigma/Entanglement Convergent Evolution}
+    % MOST significantly, this planner is exactly the same as planner c5b4f, which
+    %   evolved as the best-in-class planner on the Entanglement map. 
+    % This is an example of convergent evolution.
+    % Finding situations like this is the core goal of this thesis.
+    % (pause)
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned_split_1.pdf}
+\end{frame}
+
+\begin{frame}{Enigma Validation}
+    % Here is a quick validation run showing how a single attempt differed from the initial baseline.
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned_split_2.pdf}
+\end{frame}
+
+\begin{frame}{Turbo and No-Obstacles}
+    % Alternatively, the Turbo planner learns to bias towards the goal roughly half the time, presumably because the space is so open.
+    % Finally, the blank map planner learns to bias 89% of the time, because the open map allows it to do so.
+    % These results were the first preliminary indication that goal-specialization was succeeding.
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned_split_3.pdf}
+\end{frame}
+
+\begin{frame}{Specialization Results}
+% This table summarizes the first specialization results across five different maps.
+% Each planner reduces the number of nodes that it considers relative to the baseline.
+% However, almost every planner does so in a different way.
+% The Milan planner modified step size, it was also the hardest to find in terms of Edit Depth
+% Based on an edit depth of 4, it is the hardest planner to find.
+% The Enigma and Entanglement planners modify the bias parameter to 7/8, which controls how likely a planner is to move directly to the goal.
+% Interestingly, they were also *found* in identical ways.
+
+% Finally, the Turbo and No Obstacles planners also change the bias parameter, but to different values for each map.
+\begin{table}[h]
+{\small 
+\caption{Best-in-class RRT* Statistics (Nodes)}
+\label{environments}
+\begin{center}
+\begin{tabular}{l|lllll}
+\hline \hline
+\multicolumn{1}{c}{\bf Map}  & 
+\multicolumn{1}{c}{\bf $\displaystyle -\Delta$\% Nodes} &  \multicolumn{1}{c}{\bf Edit Depth} &  \multicolumn{1}{c}{\bf Hash} & 
+\multicolumn{1}{c}{\bf $r_0$ (step size)} &  \multicolumn{1}{c}{\bf $\alpha$ (bias)} &
+% Name                 | Nodes   | Depth | Name | r | a | Path | Depth | Name | r | a
+Milan        & \cc{$82.35$\%} & $4$ & \plnr{94e7b}  & \cb{$50,000$} & \gr{$7/4$ (>1)} \\
+Enigma       & \cc{$74.87$\%} & $3$ & \plnr{49980}  & \cb{$100$}    & \cb{$7/8$} \\
+Entanglement & \cc{$85.16$\%} & $3$ & \plnr{c5b4f}  & \cb{$100$}    & \cb{$7/8$} \\
+Turbo        & \cc{$64.29$\%} & $3$ & \plnr{6e799}  & \gr{$50$}     & \cb{$4/9$} \\
+No Obstacles & \cc{$89.47$\%} & $1$ & \plnr{70458}  & \gr{$50$} & \cb{$1/9$} \\
+\hline 
+\multicolumn{1}{c}{\bf Baseline} & \gr{$0.0$\%} & $0$ & {\color{code}Initial}  & \gr{$50$}     & \gr{$1.0$} \\
+\hline \hline
+\end{tabular}
+\end{center}}
+\end{table}
+\end{frame}
+
+\begin{frame}[plain]
+  % So, for instance, how did planner 49980 evolve?
+  % This figure shows the ancestry tree for the Starcraft Enigma experiment.
+  \begin{figure}
   \centering
-  \vfill
-  {\fontsize{40}{50}\selectfont \red{Methods}}
-  \vfill
+  \includegraphics[width=1.0\linewidth,keepaspectratio]{figures/tree.pdf}
+  \end{figure}
+  \begin{center}
+  \emph{Evolved Computer Programs}
+  \end{center}
+\end{frame}
+
+\begin{frame}[plain]{}
+  % So, those were the main results of this thesis.
+  % Now, I will move on to discussing how they were reached.
+  % Shown here is the mandelbrot set.
+  \begin{figure}
+  \vspace*{-4em}
+  \hspace*{-4em}
+  \includegraphics[width=1.2\linewidth,keepaspectratio]{figures/mandelbrot_2.jpg}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[plain]{\white{Program Synthesis}}
+  % A core goal of this thesis is Program Synthesis, which has a long history.
+  \begin{columns}[T]
+      \begin{column}{.5\linewidth}
+          \vspace{1em}
+          \emph{Kolmogorov}
+          \newline
+          \vspace{1em}
+          \item \emph{Lenat}
+          \newline
+          \vspace{1em}
+          \item \emph{Schmidhuber}
+          \newline
+          \vspace{1em}
+          \item \emph{\cite{lake2015human}}
+          \newline
+      \end{column}
+      \begin{column}{.5\linewidth}
+          \begin{figure}
+              \vspace{-3.5em}
+              \hspace*{1.1em}
+              \rotatebox[origin=c]{-90}{\includegraphics[height=1.0\linewidth,keepaspectratio]{figures/mandelbrot.jpg}}
+          \end{figure}
+      \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{\white{Program Synthesis \& Learning}}
+    \emph{Problem} 
+    \begin{itemize}
+        \item What base problem is being solved?
+    \end{itemize}
+    \vspace{1em}
+    \emph{Representation} 
+    \begin{itemize}
+        \item How are programs represented?
+    \end{itemize}
+    \vspace{1em}
+    \emph{Optimization} 
+    \begin{itemize}
+        \item How are programs optimized?
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{AutoML-Zero: Evolving Machine Learning Algorithms From Scratch \white{\cite{real2020automl}}}
@@ -374,41 +512,6 @@
 \end{figure}
 \end{frame}
 
-\begin{frame}{\white{Algorithm Choice:}}
-
-  \begin{columns}[T]
-      \begin{column}{.6\linewidth}
-        \begin{vfilleditems}
-            \item \emph{Pareto Evolution}
-            \begin{itemize}
-                \item Multi-objective
-            \end{itemize}
-            \vspace{1em}
-            $O(g * m * n^2)$
-        \end{vfilleditems}
-      \end{column}
-      \begin{column}{.7\linewidth}
-        \begin{vfilleditems}
-            \item \emph{Regularized Evolution}
-            \begin{itemize}
-                \item Single-objective
-            \end{itemize}
-            \vspace{1em}
-            $O(g * p)$
-        \end{vfilleditems}
-      \end{column}
-  \end{columns}
-  \begin{center}
-  {\Large Where \color{m1} $g = $ generations}
-  \newline
-  {\Large \hspace{6em} \color{m1} $m = $ objectives}
-  \newline
-  {\Large \hspace{6em} $n = $ total population size}
-  \newline
-  {\Large \hspace{6em} $p = $ sample size}
-  \end{center}
-\end{frame}
-
 \begin{frame}{{\color{pureminimalistic@text@white} Multiple Objectives}}
   \begin{columns}[T]
       \begin{column}{.4\linewidth}
@@ -417,7 +520,9 @@
               \vspace{1em}
               \item \emph{Path Length}
               \vspace{1em}
-              \item {\Large Often, these objectives compete}
+              \item \emph{Exploration}
+              \vspace*{2em}
+              {\centering \Huge \ldots }
           \end{vfilleditems}
       \end{column}
       \begin{column}{.6\linewidth}
@@ -441,6 +546,56 @@
   \end{columns}
 \end{frame}
 
+\begin{frame}{}
+  \begin{columns}[T]
+      \begin{column}{.5\linewidth}
+        \emph{Pareto Ev.} {\color{grey} \Medium (NSGA2)}
+        \begin{itemize}
+            \item Multi-objective
+            \item Bandwidth: {\Large $\cc{n}$}
+        \end{itemize}
+        \vspace{1em}
+        \begin{tabular}{ll}
+        &{\Large $O(\ca{g} * \cb{m} * \cc{n}^\red{2})$}\\
+        &{\Large $O(\cb{m} * \cc{n})$} {\color{grey} per change}\\
+        &{\Large $O(\cb{m} * \cd{p})$} {\color{grey} if sampled}\\
+        \end{tabular}
+      \end{column}
+      \begin{column}{.5\linewidth}
+        \emph{Regularized Ev.}
+        \begin{itemize}
+            \item Single-objective
+            \item Bandwidth: {\Large $\cc{1}$}
+        \end{itemize}
+        \vspace{1em}
+        \begin{tabular}{ll}
+        &{\Large $O(\ca{g} * \cd{p})$}\\
+        &{\Large $O(\cd{p})$} {\color{grey} per change}\\
+        &{\Large $O(\cd{p})$} \\
+        \end{tabular}
+      \end{column}
+  \end{columns}
+  \begin{center}
+  \Large
+      \begin{tabular}{ll}
+        Where & \ca{$g = $ generations} \\
+              & \cb{$m = $ objectives}  \\
+              & \cc{$n = $ total population size}\\
+              & \cd{$p = $ sample size}\\
+     \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}{}
+  \begin{columns}[T]
+      \begin{column}{.5\linewidth}
+        \emph{Pareto Ev.}
+      \end{column}
+      \begin{column}{.5\linewidth}
+        \emph{Regularized Ev.}
+      \end{column}
+  \end{columns}
+\end{frame}
 
 \begin{frame}{Pareto Evolution}
     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/paretoev.pdf}
@@ -494,29 +649,6 @@
     \vfill
     {\fontsize{40}{50}\selectfont Final Figure and Remarks}
     \vfill
-\end{frame}
-
-\begin{frame}[plain]{}
-  \begin{figure}
-  \centering
-  \includegraphics[height=1.0\textheight,keepaspectratio]{figures/mandelbrot.jpg}
-  \end{figure}
-\end{frame}
-
-\begin{frame}[plain]{}
-  \begin{figure}
-  \centering
-  \includegraphics[width=1.0\linewidth,keepaspectratio]{figures/mandelbrot_2.jpg}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{Program Synthesis}
-\begin{vfilleditems}
-    \item \Huge Kolmogorov
-    \item \Huge Schmidhuber
-    \item \Huge Lenat
-    \item \emph{Lenat}
-\end{vfilleditems}
 \end{frame}
 
 \appendix % do not count the following slides for the total number
@@ -582,6 +714,5 @@
     \item {\Huge How hard is a problem?}
   \end{vfilleditems}
 \end{frame}
-
 
 \end{document}
