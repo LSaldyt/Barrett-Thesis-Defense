@@ -4,9 +4,6 @@
 
 \documentclass[aspectratio=169]{beamer}
 \DeclareMathSizes{12}{30}{16}{12}
-% should also look nice for the classic aspectratio
-% of course, than the text has to be refitted
-% \documentclass{beamer} 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{tikz}
@@ -14,6 +11,7 @@
 \usepackage[export]{adjustbox}
 \usepackage[percent]{overpic}
 \usepackage{epigraph}
+\usepackage{listings}
 
 \DeclareMathOperator*{\argmin}{\arg\!\min}
 \DeclareMathOperator*{\argmax}{\arg\!\max}
@@ -22,12 +20,13 @@
 
 \usepackage[american]{babel}
 \usepackage{csquotes}
-\usepackage[style=apa, backend=biber]{biblatex}
-\DeclareLanguageMapping{american}{american-UoN}
+% \usepackage[style=apa, backend=biber]{biblatex}
+% \DeclareLanguageMapping{american}{american-UoN}
 
-% \usepackage[english]{babel}
-% \usepackage[backend=biber,style=apa]{biblatex}
-% \DeclareLanguageMapping{english}{english-apa}
+\usepackage[english]{babel}
+\usepackage[backend=biber,style=apa]{biblatex}
+\DeclareLanguageMapping{english}{english-apa}
+
 \addbibresource{sources.bib}
 
 % this makes it possible to add backup slides, without counting them
@@ -68,313 +67,313 @@
 % Hello, I'm Lucas, and today I'll be presenting  "Environment Learning for Robot Path Planning"
 \maketitle
 
-\begin{frame}[plain]
-  % This thesis focuses on environmental adaptation in robots.
-  % An example robot is NASA's Perseverance rover, which was custom-engineered for mars.
-  % Because of resource constraints and a desire for reliability, this rover doesn't use machine learning directly
-  \begin{figure}
-  \centering
-  \vspace*{-1em}
-  \hspace*{-3em}
-  \includegraphics[height=9.5cm,keepaspectratio]{figures/perseverance.jpg}
-  \end{figure}
-\end{frame}
-
-\begin{frame}[plain]
-  % Instead, the rover uses an engineered navigation algorithm, or is even controlled directly. 
-  % (pause)
-  % As an environment, Mars offers unique challenges.
-  % For example, rocks can puncture the rover's wheels and sand can trap the rover.
-  % The rover relies on a combination of on-board and satellite based sensor data, which is often imperfect.
-  % Also, low-latency direct human control is impossible.
-  \begin{figure}
-  \centering
-  \vspace*{-1em}
-  \hspace*{-3em}
-  \includegraphics[height=9.5cm,keepaspectratio]{figures/mars_surface.jpg}
-  \end{figure}
-\end{frame}
-
-\begin{frame}[plain]
-  % Alternatively, consider an environment like an Amazon warehouse.
-  % In contrast to mars, it is easy to navigate.
-  % The floor is perfectly smooth, the environment is mapped almost perfectly.
-  % Communication is fast, and it is easier to integrate advanced machine learning algorithms with robots.
-  % However, in an environment like this, there can be multiple robots, or even human-robot interaction.
-  % Humans, unlike robots, don't broadcast their telemetry, and can be unpredictable.
-  % So, robots must plan very carefully to avoid dangerous collisions.
-  % (pause)
-  % Considering these differences between Mars and an Amazon warehouse brings us to the main goal of this thesis.
-  \begin{figure}
-  \centering
-  \vspace*{-1em}
-  \hspace*{-3em}
-  \includegraphics[height=9.5cm,keepaspectratio]{figures/warehouse.jpg}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{\white{Core Goals \& Concepts}}
-  % Conceptually, the focus of this thesis is on environment learning in robots.
-  %     Modern artificial intelligence is trying to move away from custom-engineering
-  %     In the context of this thesis, this means teaching robots to be generally proficient at new tasks.
-  %     But most importantly, this thesis focuses on the potential to specialize robots to particular environments.
-  % (pause)
-  % On the right, we have an image which I think is quite beautiful.
-  % This is a sketch from Darwin's notebook, presumably from when he first thought of evolution.
-  % It shows a tree depicting common ancestry and specialization.
-  \begin{columns}[T]
-      \begin{column}{.5\linewidth}
-            \vspace{-0.7em}
-            \emphasis{Learning}
-            \begin{itemize}
-              \item {\Medium Flexibility: adapt to new tasks}
-            \end{itemize}
-            \vspace{1em}
-            \emphasis{Generalization}
-            \begin{itemize}
-              \item {\Medium Learn overall task proficiency?}
-            \end{itemize}
-            \vspace{1em}
-            \emphasis{Specialization}
-            \begin{itemize}
-              \item {\Medium Learn environment details?}
-            \end{itemize}
-      \end{column}
-      \begin{column}{.5\linewidth}
-          \begin{figure}
-              \centering
-              \includegraphics[height=5.5cm, keepaspectratio]{figures/i_think.png}
-              \caption{Where is this image from?}
-              \label{fig:i_think}
-          \end{figure}
-      \end{column}
-  \end{columns}
-\end{frame}
-
-{
-\setbeamercolor{background canvas}{bg=white}
-\begin{frame}[plain]
-  % This is an artist's depiction of that same tree,
-  % In particular, it shows how specialization occurred over time.
-  % Bacteria have the oldest common ancestry.
-  % Mammals, on the other hand, are the most recent, and fill a vastly different niche.
-  % In between, there are incredibly diverse species within plants, fungi, fish, reptiles, and birds.
-  % This has led to at least 8.7 million species on earth
-  % And one can spend a lifetime for instance studying only plants
-  
-  % Ideally, this thesis would achieve the same specialization, but with..
-  \begin{figure}
-  \centering
-  \includegraphics[width=1.0\linewidth,keepaspectratio]{figures/tree_of_life.png}
-  \end{figure}
-  \begin{center}
-      \emphasis{Natural evolution}
-  \end{center}
-\end{frame}
-}
-
-\begin{frame}[plain]{}
-  % .. computer programs instead of biological species.
-  % Doing this is known as Evolutionary Programming
-  \centering
-  \vfill
-  \red{\fontsize{40}{50}\selectfont Computer Programs instead of species}
-  \vfill
-  \Huge Evolutionary Programming
-\end{frame}
-
-\begin{frame}[plain]
-  % In this slide is a teaser figure showing an ancestry tree, where programs have evolved for special tasks.
-  \begin{figure}
-  \centering
-  \includegraphics[width=1.0\linewidth,keepaspectratio]{figures/unlabeled_tree.pdf}
-  \end{figure}
-  \begin{center}
-  \emphasis{Evolved Computer Programs}
-  \end{center}
-\end{frame}
-
-\begin{frame}[plain]{\white{Problems Considered}}
-  % In particular, the task this thesis considers is *Path Planning*
-  % Path planning is the task of finding a sequence of moves between points in space.
-  % For example, on the left is a 2 dimensional map of Milan, Italy, and a robot has been tasked with finding a path between the Orange dot and the Purple dot.
-  % Originally, this thesis focused on graph-based planning, where possible moves are specified in advance, in the form of a discrete graph.
-  % However, it has moved towards sampling-based planning, where possible moves are gathered by probing the environment.
-  % The methods described in this thesis work just as well dynamic (Mars) or multi-agent planning (Amazon), but these are left for future work. 
-  % They also have strong relations to symbolic regression or neural architecture search.
-  \begin{columns}[T]
-      \begin{column}{.5\linewidth}
-          \vspace{0.5cm}
-          \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/one_off.pdf}
-          \vfill
-      \end{column}
-      \hspace{1.0em}
-      \begin{column}{.5\linewidth}
-          \emphasis{Path Planning}
-          \begin{vfilleditems}
-              \item {\Large Graph-based}
-              \vspace{1em}
-              \item {\Large Sample-based \Medium (left)}
-              \vspace{1em}
-              \item {\color{grey} {\Large Dynamic (i.e. Mars)}}
-              \vspace{1em}
-              \item {\color{grey} {\Large Multiagent (i.e. Amazon)}}
-          \end{vfilleditems}
-          \vspace{1em}
-          {\color{grey} {\Large Symbolic Regression}}
-          \vspace{1em}
-          {\color{grey} {\Large Neural Arch. Search}}
-      \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}[plain]{Graph search w/ Dijkstra \white{(New York)}}
-    % This image shows the behavior of a graph-based path planner, specifically Dijkstra's algorithm, on a map of New York.
-    % In this case, the streets are specified in advance, and a planning algorithm is asked to find a route from the bottom of New York to the top of New York
-    % Pink indicates roads that were considered
-    % Blank indicates unconsidered roads
-    % Yellow indicates the optimal path
-    \includegraphics[width=1.0\linewidth, keepaspectratio, trim={0cm, 2cm, 1cm, 0.5cm}, clip]{figures/ny_graph_based.png}
-\end{frame}
-
-\begin{frame}[plain]{Graph search w/ A* \white{(New York)}}
-    % However, the choice of algorithm can be a difference of millions of roads.
-    % This algorithm is A* with a geodesic heuristic.
-    % This means the algorithm knows a lower bound on how far it is from the goal at any time.
-    % In this thesis, I will demonstrate how it is possible to find similar improvements *automatically*
-    \includegraphics[width=1.0\linewidth, keepaspectratio, trim={0.5cm 1.5cm 0 2.5cm}, clip]{figures/ny_graph_based_geodesic.png}
-\end{frame}
-
-\begin{frame}[plain]{Graph-based Algorithms \white{(Kiev, Ukraine)}}
-  % The graph-based portion of this thesis considered four relatively simple algorithms.
-  % These are Breadth first search, depth first search, Dijkstra's algorithm, and A* and its variants.
-  % If people are interested in more advanced algorithms, Hannah Bast of the University of Frieberg has an amazing paper on the subject.
-  % When using a service like Google Maps, it is more likely that it uses one of these more advanced algorithms.
-  % However, I leave these for future and ongoing work.
-  \begin{columns}[T]
-      \begin{column}{.4\linewidth}
-          \begin{vfilleditems}
-              \item {\Large Breadth-first (BFS)}
-              \item {\Large Depth-first (DFS)}
-              \item {\Large Dijkstra/A*}
-              \vspace{1em}
-              {\color{grey}
-              \item {\Large Goal-directed}
-              \item {\Large Separator-based}
-              \item {\Large Hierarchical}
-              \item {\Large Bounded Hop}
-              \item {\Large Hybrid Techniques}
-              \vspace{1em}
-              }
-              \item \red{\Large \cite{bast2016route}}
-          \end{vfilleditems}
-      \end{column}
-      \begin{column}{.6\linewidth}
-      \includegraphics[height=0.9\textheight, keepaspectratio, trim={5cm 3cm 12cm 2cm}, clip]{figures/kiev.png}
-      \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}[plain]{Sampling-based search \white{(Baldur's Gate)}}
-  % Next, there are sampling-based algorithms, which work by randomly sampling points in space.
-  % There are two main variants: Rapidly exploring random trees and probabilistic road-maps
-  % RRTs by far have the most variants, all of which address different conditions, like goal direction, a large amount of constrains, or a dynamic environment.
-  % Probabilistic road maps, on the other hand, (TODO)
-  % I focus mostly on simple RRT* variants
-  \begin{columns}[T]
-      \begin{column}{.35\linewidth}
-      \vspace{0.05\textheight}
-      \includegraphics[height=0.7\textheight, keepaspectratio]{figures/baldurs_rrt_one_off.pdf}
-      \end{column}
-      \begin{column}{.65\linewidth}
-          \begin{vfilleditems}
-              \item {\Large Rapidly Exploring Random Trees \red{(RRTs)}}
-              \begin{itemize}
-                  \item RRT, RRT*, Informed RRT*
-                  \item Multi-phase
-                  \item RRT-Blossom
-                  \item Dynamic RRT* (RT-RRT*, RRTX, RRT#)
-              \end{itemize}
-              \vspace{1em}
-              \item {\Large Probabilistic Road Maps \red{(PRMs)}}
-              % \item {\Large \color{grey} Potential Fields}
-          \end{vfilleditems}
-      \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}[plain]{RRT* \white{(Baldur's Gate)}}
-    % The basic principle behind RRTs is *Voronoi Regions*
-    % This figure shows the voronoi regions (in orange)
-    %   and convex hull (in pink) of an RRT* run
-    % Essentially, a new point is sampled, it will be connected to
-    %   its nearest neighbor. Voronoi regions represent which node
-    %   is nearest to an *area* of the map.
-    % The convex hull shows the outer perimeter of the explored space
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/baldurs_1k_explorer.pdf}
-\end{frame}
-
-\begin{frame}{Maps Overview {\Medium \color{white}( \cite{sturtevant2012benchmarks})}}
-    % Here is an overview of the various 2D maps considered in this thesis
-    % This includes maps from video games, such as:
-    %   - Baldur's Gate
-    %   - Dragon Age
-    %   - World of Warcraft
-    %   - Starcraft
-    % However, it also includes obstacle maps of large cities, such as:
-    %   - Boston, Shanghai, Milan
-    % Finally, it includes several mazes, and even some Amazon warehouses
-    \includegraphics[width=0.95\linewidth, keepaspectratio]{figures/show_maps_overview.pdf}
-\end{frame}
-
-\begin{frame}{Maps Detail {\Medium \color{white}( \cite{sturtevant2012benchmarks})}}
-    % Here, we see various maps in closer detail.
-    % Many maps in this dataset have unique characteristics.
-    % For example, this Shanghai map, or the bottom-left Dragon Age map are both relatively open.
-    % In contrast, the Boston map and Starcraft: Frozen Sea map are cluttered.
-    % The Baldur's gate map, the maze, and the Dragon Age mansion map all have narrow corridors.
-    % Because each map has it's own characteristics, the goal of this thesis is to specialize algorithms to each of them.
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/show_maps.pdf}
-\end{frame}
-
-\begin{frame}{Specialization Results}
-  % Here is a teaser figure showing the potential for specialization.
-  % Four experiments were run on Boston, Baldur's Gate, Dragon Age, and Starcraft maps.
-  % The Boston planner runs relatively well
-  % The Baldurs Gate Planner runs relatively well
-  % The dragon age planner does not. I address this later on.
-  % The starcraft planner does exceptionally well given a difficult problem.
-  % That brings us to the methods section of this thesis.
-  \begin{columns}[T]
-      \begin{column}{.6\linewidth}
-      \centering
-      \vspace{-1em}
-      \includegraphics[height=0.9\textheight]{figures/learned2.pdf}
-      \end{column}
-      \begin{column}{.4\linewidth}
-      \centering
-      \epigraph{
-      There is no “silver bullet” algorithm for solving all path planning problems. Heuristics that lead to massive speed-up in one scenario might be detrimental in others. Also, algorithmic parameters are mostly ad-hoc and correctly tuning them to a \red{specific environment} might drastically increase performance.
-      }{\textit{
-      Nikolaus Correll
-      }}
-      \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}[plain]{}
-  % Shown here is the mandelbrot set.
-  % The mandelbrot set is relevant, because it brings us to Andrey Kolmogorov, an important figure in *program synthesis*
-  % The mandelbrot set is important because it can be generated with a short computer program
-  %   but generates an image which takes up significantly more space.
-  % In other words, the mandelbrot set is an ideal example of *compression*
-  % Kolmogorov considered program synthesis for *compression*, and his central result was this:
-  \begin{figure}
-  \vspace*{-4em}
-  \hspace*{-4em}
-  \includegraphics[width=1.2\linewidth,keepaspectratio]{figures/mandelbrot_2.jpg}
-  \end{figure}
-\end{frame}
+% \begin{frame}[plain]
+%   % This thesis focuses on environmental adaptation in robots.
+%   % An example robot is NASA's Perseverance rover, which was custom-engineered for mars.
+%   % Because of resource constraints and a desire for reliability, this rover doesn't use machine learning directly
+%   % Instead, the rover uses an engineered navigation algorithm, or is even controlled directly. 
+%   \begin{figure}
+%   \centering
+%   \vspace*{-1em}
+%   \hspace*{-3em}
+%   \includegraphics[height=9.5cm,keepaspectratio]{figures/perseverance.jpg}
+%   \end{figure}
+% \end{frame}
+% 
+% \begin{frame}[plain]
+%   % As an environment, Mars offers unique challenges.
+%   % For example, rocks can puncture the rover's wheels and sand can trap the rover.
+%   % The rover relies on a combination of on-board and satellite based sensor data, which is often imperfect.
+%   % Also, low-latency direct human control is impossible.
+%   \begin{figure}
+%   \centering
+%   \vspace*{-1em}
+%   \hspace*{-3em}
+%   \includegraphics[height=9.5cm,keepaspectratio]{figures/mars_surface.jpg}
+%   \end{figure}
+% \end{frame}
+% 
+% \begin{frame}[plain]
+%   % Alternatively, consider an environment like an Amazon warehouse.
+%   % In contrast to mars, it is easy to navigate.
+%   % The floor is perfectly smooth, the environment is mapped almost perfectly.
+%   % Communication is fast, and it is easier to integrate advanced machine learning algorithms with robots.
+%   % However, in an environment like this, there can be multiple robots, or even human-robot interaction.
+%   % Humans, unlike robots, don't broadcast their telemetry, and can be unpredictable.
+%   % So, robots must plan very carefully to avoid dangerous collisions.
+%   % (pause)
+%   % Considering these differences between Mars and an Amazon warehouse brings us to the main goal of this thesis.
+%   \begin{figure}
+%   \centering
+%   \vspace*{-1em}
+%   \hspace*{-3em}
+%   \includegraphics[height=9.5cm,keepaspectratio]{figures/warehouse.jpg}
+%   \end{figure}
+% \end{frame}
+% 
+% \begin{frame}{\white{Core Goals \& Concepts}}
+%   % Conceptually, the focus of this thesis is on environment learning in robots.
+%   %     Modern artificial intelligence is trying to move away from custom-engineering
+%   %     In the context of this thesis, this means teaching robots to be generally proficient at new tasks.
+%   %     But most importantly, this thesis focuses on the potential to specialize robots to particular environments.
+%   % (pause)
+%   % On the right, we have an image which I think is quite beautiful.
+%   % This is a sketch from Darwin's notebook, presumably from when he first thought of evolution.
+%   % It shows a tree depicting common ancestry and specialization.
+%   \begin{columns}[T]
+%       \begin{column}{.5\linewidth}
+%             \vspace{-0.7em}
+%             \emphasis{Learning}
+%             \begin{itemize}
+%               \item {\Medium Flexibility: adapt to new tasks}
+%             \end{itemize}
+%             \vspace{1em}
+%             \emphasis{Generalization}
+%             \begin{itemize}
+%               \item {\Medium Learn overall task proficiency?}
+%             \end{itemize}
+%             \vspace{1em}
+%             \emphasis{Specialization}
+%             \begin{itemize}
+%               \item {\Medium Learn environment details?}
+%             \end{itemize}
+%       \end{column}
+%       \begin{column}{.5\linewidth}
+%           \begin{figure}
+%               \centering
+%               \includegraphics[height=5.5cm, keepaspectratio]{figures/i_think.png}
+%               \caption{Where is this image from?}
+%               \label{fig:i_think}
+%           \end{figure}
+%       \end{column}
+%   \end{columns}
+% \end{frame}
+% 
+% {
+% \setbeamercolor{background canvas}{bg=white}
+% \begin{frame}[plain]
+%   % This is an artist's depiction of that same tree,
+%   % In particular, it shows how specialization occurred over time.
+%   % Bacteria have the oldest common ancestry.
+%   % Mammals, on the other hand, are the most recent, and fill a vastly different niche.
+%   % In between, there are incredibly diverse species within plants, fungi, fish, reptiles, and birds.
+%   % This has led to at least 8.7 million species on earth
+%   % And one can spend a lifetime for instance studying only plants
+%   
+%   % Ideally, this thesis would achieve the same specialization, but with..
+%   \begin{figure}
+%   \centering
+%   \includegraphics[width=1.0\linewidth,keepaspectratio]{figures/tree_of_life.png}
+%   \end{figure}
+%   \begin{center}
+%       \emphasis{Natural evolution}
+%   \end{center}
+% \end{frame}
+% }
+% 
+% \begin{frame}[plain]{}
+%   % .. computer programs instead of biological species.
+%   % Doing this is known as Evolutionary Programming
+%   \centering
+%   \vfill
+%   \red{\fontsize{40}{50}\selectfont Computer Programs instead of species}
+%   \vfill
+%   \Huge Evolutionary Programming
+% \end{frame}
+% 
+% \begin{frame}[plain]
+%   % In this slide is a teaser figure showing an ancestry tree, where programs have evolved for special tasks.
+%   \begin{figure}
+%   \centering
+%   \includegraphics[width=1.0\linewidth,keepaspectratio]{figures/unlabeled_tree.pdf}
+%   \end{figure}
+%   \begin{center}
+%   \emphasis{Evolved Computer Programs}
+%   \end{center}
+% \end{frame}
+% 
+% \begin{frame}[plain]{\white{Problems Considered}}
+%   % In particular, the task this thesis considers is *Path Planning*
+%   % Path planning is the task of finding a sequence of moves between points in space.
+%   % For example, on the left is a 2 dimensional map of Milan, Italy, and a robot has been tasked with finding a path between the Orange dot and the Purple dot.
+%   % Originally, this thesis focused on graph-based planning, where possible moves are specified in advance, in the form of a discrete graph.
+%   % However, it has moved towards sampling-based planning, where possible moves are gathered by probing the environment.
+%   % The methods described in this thesis work just as well dynamic (Mars) or multi-agent planning (Amazon), but these are left for future work. 
+%   % They also have strong relations to symbolic regression or neural architecture search.
+%   \begin{columns}[T]
+%       \begin{column}{.5\linewidth}
+%           \vspace{0.5cm}
+%           \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/one_off.pdf}
+%           \vfill
+%       \end{column}
+%       \hspace{1.0em}
+%       \begin{column}{.5\linewidth}
+%           \emphasis{Path Planning}
+%           \begin{vfilleditems}
+%               \item {\Large Graph-based}
+%               \vspace{1em}
+%               \item {\Large Sample-based \Medium (left)}
+%               \vspace{1em}
+%               \item {\color{grey} {\Large Dynamic (i.e. Mars)}}
+%               \vspace{1em}
+%               \item {\color{grey} {\Large Multiagent (i.e. Amazon)}}
+%           \end{vfilleditems}
+%           \vspace{1em}
+%           {\color{grey} {\Large Symbolic Regression}}
+%           \vspace{1em}
+%           {\color{grey} {\Large Neural Arch. Search}}
+%       \end{column}
+%   \end{columns}
+% \end{frame}
+% 
+% \begin{frame}[plain]{Graph search w/ Dijkstra \white{(New York)}}
+%     % This image shows the behavior of a graph-based path planner, specifically Dijkstra's algorithm, on a map of New York.
+%     % In this case, the streets are specified in advance, and a planning algorithm is asked to find a route from the bottom of New York to the top of New York
+%     % Pink indicates roads that were considered
+%     % Blank indicates unconsidered roads
+%     % Yellow indicates the optimal path
+%     \includegraphics[width=1.0\linewidth, keepaspectratio, trim={0cm, 2cm, 1cm, 0.5cm}, clip]{figures/ny_graph_based.png}
+% \end{frame}
+% 
+% \begin{frame}[plain]{Graph search w/ A* \white{(New York)}}
+%     % However, the choice of algorithm can be a difference of millions of roads.
+%     % This algorithm is A* with a geodesic heuristic.
+%     % This means the algorithm knows a lower bound on how far it is from the goal at any time.
+%     % In this thesis, I will demonstrate how it is possible to find similar improvements *automatically*
+%     \includegraphics[width=1.0\linewidth, keepaspectratio, trim={0.5cm 1.5cm 0 2.5cm}, clip]{figures/ny_graph_based_geodesic.png}
+% \end{frame}
+% 
+% \begin{frame}[plain]{Graph-based Algorithms \white{(Kiev, Ukraine)}}
+%   % The graph-based portion of this thesis considered four relatively simple algorithms.
+%   % These are Breadth first search, depth first search, Dijkstra's algorithm, and A* and its variants.
+%   % If people are interested in more advanced algorithms, Hannah Bast of the University of Frieberg has an amazing paper on the subject.
+%   % When using a service like Google Maps, it is more likely that it uses one of these more advanced algorithms.
+%   % However, I leave these for future and ongoing work.
+%   \begin{columns}[T]
+%       \begin{column}{.4\linewidth}
+%           \begin{vfilleditems}
+%               \item {\Large Breadth-first (BFS)}
+%               \item {\Large Depth-first (DFS)}
+%               \item {\Large Dijkstra/A*}
+%               \vspace{1em}
+%               {\color{grey}
+%               \item {\Large Goal-directed}
+%               \item {\Large Separator-based}
+%               \item {\Large Hierarchical}
+%               \item {\Large Bounded Hop}
+%               \item {\Large Hybrid Techniques}
+%               \vspace{1em}
+%               }
+%               \item \red{\Large \cite{bast2016route}}
+%           \end{vfilleditems}
+%       \end{column}
+%       \begin{column}{.6\linewidth}
+%       \includegraphics[height=0.9\textheight, keepaspectratio, trim={5cm 3cm 12cm 2cm}, clip]{figures/kiev.png}
+%       \end{column}
+%   \end{columns}
+% \end{frame}
+% 
+% \begin{frame}[plain]{Sampling-based search \white{(Baldur's Gate)}}
+%   % Next, there are sampling-based algorithms, which work by randomly sampling points in space.
+%   % There are two main variants: Rapidly exploring random trees and probabilistic road-maps
+%   % RRTs by far have the most variants, all of which address different conditions, like goal direction, a large amount of constrains, or a dynamic environment.
+%   % Probabilistic road maps, on the other hand, (TODO)
+%   % I focus mostly on simple RRT* variants
+%   \begin{columns}[T]
+%       \begin{column}{.35\linewidth}
+%       \vspace{0.05\textheight}
+%       \includegraphics[height=0.7\textheight, keepaspectratio]{figures/baldurs_rrt_one_off.pdf}
+%       \end{column}
+%       \begin{column}{.65\linewidth}
+%           \begin{vfilleditems}
+%               \item {\Large Rapidly Exploring Random Trees \red{(RRTs)}}
+%               \begin{itemize}
+%                   \item RRT, RRT*, Informed RRT*
+%                   \item Multi-phase
+%                   \item RRT-Blossom
+%                   \item Dynamic RRT* (RT-RRT*, RRTX, RRT#)
+%               \end{itemize}
+%               \vspace{1em}
+%               \item {\Large Probabilistic Road Maps \red{(PRMs)}}
+%               % \item {\Large \color{grey} Potential Fields}
+%           \end{vfilleditems}
+%       \end{column}
+%   \end{columns}
+% \end{frame}
+% 
+% \begin{frame}[plain]{RRT* \white{(Baldur's Gate)}}
+%     % The basic principle behind RRTs is *Voronoi Regions*
+%     % This figure shows the voronoi regions (in orange)
+%     %   and convex hull (in pink) of an RRT* run
+%     % Essentially, a new point is sampled, it will be connected to
+%     %   its nearest neighbor. Voronoi regions represent which node
+%     %   is nearest to an *area* of the map.
+%     % The convex hull shows the outer perimeter of the explored space
+%     Intentionally blank
+%     % \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/baldurs_1k_explorer.pdf}
+% \end{frame}
+% 
+% \begin{frame}{Maps Overview {\Medium \color{white}( \cite{sturtevant2012benchmarks})}}
+%     % Here is an overview of the various 2D maps considered in this thesis
+%     % This includes maps from video games, such as:
+%     %   - Baldur's Gate
+%     %   - Dragon Age
+%     %   - World of Warcraft
+%     %   - Starcraft
+%     % However, it also includes obstacle maps of large cities, such as:
+%     %   - Boston, Shanghai, Milan
+%     % Finally, it includes several mazes, and even some Amazon warehouses
+%     \includegraphics[width=0.95\linewidth, keepaspectratio]{figures/show_maps_overview.pdf}
+% \end{frame}
+% 
+% \begin{frame}{Maps Detail {\Medium \color{white}( \cite{sturtevant2012benchmarks})}}
+%     % Here, we see various maps in closer detail.
+%     % Many maps in this dataset have unique characteristics.
+%     % For example, this Shanghai map, or the bottom-left Dragon Age map are both relatively open.
+%     % In contrast, the Boston map and Starcraft: Frozen Sea map are cluttered.
+%     % The Baldur's gate map, the maze, and the Dragon Age mansion map all have narrow corridors.
+%     % Because each map has it's own characteristics, the goal of this thesis is to specialize algorithms to each of them.
+%     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/show_maps.pdf}
+% \end{frame}
+% 
+% \begin{frame}{Specialization Results}
+%   % Here is a teaser figure showing the potential for specialization.
+%   % Four experiments were run on Boston, Baldur's Gate, Dragon Age, and Starcraft maps.
+%   % The Boston planner runs relatively well
+%   % The Baldurs Gate Planner runs relatively well
+%   % The dragon age planner does not. I address this later on.
+%   % The starcraft planner does exceptionally well given a difficult problem.
+%   % That brings us to the methods section of this thesis.
+%   \begin{columns}[T]
+%       \begin{column}{.6\linewidth}
+%       \centering
+%       \vspace{-1em}
+%       \includegraphics[height=0.9\textheight]{figures/learned2.pdf}
+%       \end{column}
+%       \begin{column}{.4\linewidth}
+%       \centering
+%       \epigraph{
+%       There is no “silver bullet” algorithm for solving all path planning problems. Heuristics that lead to massive speed-up in one scenario might be detrimental in others. Also, algorithmic parameters are mostly ad-hoc and correctly tuning them to a \red{specific environment} might drastically increase performance.
+%       }{\textit{
+%       Nikolaus Correll
+%       }}
+%       \end{column}
+%   \end{columns}
+% \end{frame}
+% 
+% \begin{frame}[plain]{}
+%   % Shown here is the mandelbrot set.
+%   % The mandelbrot set is relevant, because it brings us to Andrey Kolmogorov, an important figure in *program synthesis*
+%   % The mandelbrot set is important because it can be generated with a short computer program
+%   %   but generates an image which takes up significantly more space.
+%   % In other words, the mandelbrot set is an ideal example of *compression*
+%   % Kolmogorov considered program synthesis for *compression*, and his central result was this:
+%   \begin{figure}
+%   \vspace*{-4em}
+%   \hspace*{-4em}
+%   \includegraphics[width=1.2\linewidth,keepaspectratio]{figures/mandelbrot_2.jpg}
+%   \end{figure}
+% \end{frame}
 
 \begin{frame}[plain]{\white{Program Synthesis}}
   % Searching program space exhaustively is impossible, because of Turing's halting problem.
@@ -420,6 +419,7 @@
   % (pause)
   % My favorite example of program synthesis is a paper by Brendan Lake, Ruslan Salakhutdinov, and Joshua Tenenbaum.
   % In this paper, a powerful program representation is learned using a combination of bayesian inference and gradient methods.
+  % The core takeaway from this paper is simply that *learned representation matters*
   
   % However, the core inspiration for this thesis is a paper by Google Brain,
   %   written by Real et al, and I'll go into more detail in a minute.
@@ -433,7 +433,8 @@
           \vspace{1em}
           \emphasis{\cite{lake2015human}}
           \begin{itemize}
-              \onslide<2->{\item Bayesian Program Learning}
+              \onslide<2->{\item Bayesian Program Learning
+              \item Representation matters}
           \end{itemize}
           \vspace{1em}
           \emphasis{\cite{real2020automl}}
@@ -457,9 +458,10 @@
   % The most relevant type of program synthesis is via Evolutionary algorithms
   % Using this is known as evolutionary programming.
   % 
-  % In a nutshell, evolutionary programming keeps a population
+  % In a nutshell, an evolutionary algorithm keeps a population
   %   of solutions, called members, which are being optimized for a particular goal.
   % Members are *encoded*, for instance as a vector of numbers or as computer programs.
+  % If the encoding is a computer program, then the algorithm is doing evolutionary programming
   % 
   % Optimization is accomplished by *selecting* population members based on
   %   their *fitness* score, which is their performance on some goal.
@@ -471,7 +473,7 @@
   % 
   % On the right is a small evolutionary experiment.
   % Members are represented as points in space
-  % Points are selected for based on their x and y components.
+  % Points are selected for based on fitness, which is the sum of their x and y components.
   % They are mutated by randomly regenerating a single coordinate.
   % The "After" figure shows three applications of selection.
   % As you can see, the average fitness of the population increases over time via this method.
@@ -493,9 +495,17 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Approach Template}
+\begin{frame}[plain]{}
   % First, consider this:
   % Many problems are actually program learning in disguise.
+  % How can we classify these problems?
+  \centering
+  \vfill
+  \red{\fontsize{40}{50}\selectfont Approach Classification}
+  \vfill
+\end{frame}
+
+\begin{frame}{Approach Template Example}
   % Here, I've created a template which fits many important problems in computer science.
 
   % Now consider how a convolutional neural network might fit into this framework
@@ -523,7 +533,7 @@
   \vfill
   \red{\fontsize{40}{50}\selectfont "Meta"}
   \vfill
-  \Large Referring to itself or to the conventions of its genre; \cc{self-referential}.
+  \Large Referring to itself or to the conventions of its genre; \cc{self-referential} \gr{(Wikipedia Definition)}
 \end{frame}
 
 \begin{frame}{AutoML-Zero: Evolving Machine Learning Algorithms From Scratch \white{\cite{real2020automl}}}
@@ -537,7 +547,7 @@
   %   To meta-learn how to do classification, this paper represents neural networks via a
   %     **Tensor Register Machine**. This is their program representation.
   %   This program representation is optimized via Regularized Evolution, which is 
-  %     an evolutionary algorithm. I'll explain how this works in detail later.
+  %     an evolutionary algorithm.
     \begin{vfilleditems}
         \item \cb{\Huge Learns ML practices on CIFAR-10}
         \vspace{0.7em}
@@ -548,8 +558,12 @@
 \end{frame}
 
 \begin{frame}{Regularized Evolution}
-  % First I'll introduce Regularized evolution, which is the simplest part of AutoML-Zero
-  % 
+  % Regularized Evolution is a fast, stable method for population optimization.
+  % Crucially, Regularized Evolution uses *aging*.
+  % The population is represented as a queue, with young members at the start and old members at the end.
+  % Every iteration, Reg. Ev. samples a subset of the population.
+  % The best member is selected from this sample.
+  % Then, the oldest member of the population is discarded.
     \includegraphics[width=0.95\linewidth, keepaspectratio]{figures/regev.pdf}
 \end{frame}
 
@@ -561,6 +575,10 @@
   % Because of this, Google considers 10 billion algorithms before they reach the first promising one
   % Then, between considering 10 billion and one trillion algorithms,
   %   the best-found image classification model gradually improves.
+  % Improvements come from the algorithm finding various machine learning practices.
+  % First, a linear model is learned.
+  % Then, stochastic gradient descent is learned.
+  % Eventually, a competitive modern classifier is evolved.
     \begin{figure}
         \centering
         \includegraphics[scale=0.37]{figures/automl_zero_main_fig.png}
@@ -620,9 +638,9 @@
   % For example, v1 and v2 are Pareto-equivalent because while
   %   v1 has the shortest path, v2 considers fewer nodes.
   % In the same way, v3 is also pareto-equivalent
+  % Because these three members are pareto-equivalent, they are placed in the first pareto front.
   % However, v4 is not, because v1 strictly outperforms it on both metrics.
   
-  % Sets of Pareto-equivalent programs form Pareto-fronts, where each algorithm has trade-offs with one-another. 
   % These fronts are shown via the curves in this figure. 
   \begin{columns}[T]
       \begin{column}{.4\linewidth}
@@ -652,11 +670,19 @@
 
 \begin{frame}{Evolvable Python Programs}
   \begin{columns}[T]
-      \begin{column}{.4\linewidth}
-      Left
+      \begin{column}{.5\linewidth}
+      \begin{lstlisting}[language=Python]
+          def build(K=1000):
+              tree = Tree()
+              for k in range(K):
+                  rrt_extend(tree)
+              return tree
+          import numpy as np
+      \end{lstlisting}
+      Representation
       \end{column}
-      \begin{column}{.6\linewidth}
-      Right
+      \begin{column}{.5\linewidth}
+      Mutation
       \end{column}
   \end{columns}
 \end{frame}
@@ -708,31 +734,27 @@
   \end{center}
 \end{frame}
 
-
 \begin{frame}{Population Dynamics: Starcraft Engima}
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/early_pheno.pdf}
-\end{frame}
-
-\begin{frame}{Population Dynamics: Starcraft Engima}
+  % Here is an example of the population dynamics of an optimization run.
     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/pheno.pdf}
-\end{frame}
-
-\begin{frame}{Population Dynamics: Baldur's Gate}
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/baldurs_pheno_60.pdf}
 \end{frame}
 
 \begin{frame}{Specialization Results}
     % Here are the results of specializing algorithms to particular maps.
     % This experiment looked at five different scenarios:
-    %   Milan, Italy, (in the top left) which is a relatively cluttered map
-    %   A blank map   (in the bottom right) which is intentionally open and easy to specialize to.
-    % Three starcraft maps: Enigma, Turbo, and Entanglement.
-    % Milan and the blank map are meant to be controls,
-    %   while the starcraft maps are the main experiment.
+    %   Milan, Italy, which is a relatively cluttered map
+    %   A blank map,  which is intentionally open and easy to specialize to.
+    %   A validation map, which is highly cluttered and tight.
+    % The main experiment used three starcraft maps: Enigma, Turbo, and Entanglement.
+    % More starcraft maps have been used in other experiments
     
-    % Each experiment evolves a population of computer programs which are evaluated on several problems on a single map.
-    % In the methods section, I'll explain how this evolution happens in-depth.
-    
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/show_maps_exp.pdf}
+\end{frame}
+
+\begin{frame}{Specialization Results}
+    % This is an overview of all specialized algorithms.
+    % Simply note their different behaviors.
+    % Now, I'll go through them in depth.
     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned.pdf}
 \end{frame}
 
@@ -746,7 +768,7 @@
 
 \begin{frame}{Enigma/Entangle. Convergent Evolution}
     % Next, there is the best planner on the Enigma map, planner 49980, on the left. 
-    % This planner biases towards the goal 7/8 of the time, and considers 74.87% fewer nodes than the baseline planner.
+    % This planner biases towards the goal 13% of the time, and considers 75% fewer nodes than the baseline planner.
     % MOST significantly, this planner is exactly the same as planner c5b4f, which
     %   evolved as the best-in-class planner on the Entanglement map. 
     % This is an example of convergent evolution.
@@ -870,14 +892,6 @@ No Obstacles & \cc{$89.47$\%} & $1$ & \plnr{70458}  & \gr{$50$} & \cb{$1/9$} \\
     \end{vfilleditems}
 \end{frame}
 
-
-\begin{frame}[plain]{Program Learning Template}
-\begin{figure}
-    \centering
-    \includegraphics[width=0.9\linewidth]{figures/meme.jpg}
-\end{figure}
-\end{frame}
-
 \begin{frame}{Program Learning Template}
 \begin{table}[h]
 {\small 
@@ -886,9 +900,9 @@ No Obstacles & \cc{$89.47$\%} & $1$ & \plnr{70458}  & \gr{$50$} & \cb{$1/9$} \\
 \begin{center}
 \begin{tabular}{l|lllll}
 \hline \hline
-\multicolumn{1}{c}{\bf Problem}  & 
-\multicolumn{1}{c}{\bf Representation} &  
-\multicolumn{1}{c}{\bf Optimization} \\  
+\multicolumn{1}{c}{\bf \cb{Problem}}  & 
+\multicolumn{1}{c}{\bf \cc{Representation}} &  
+\multicolumn{1}{c}{\bf \ce{Optimization}} \\  
 \hline
 Image Classification & NN Weights              & Gradient \\
 Char. Recognition    & Probabilistic Program   & Bayes. Inference \\
@@ -898,6 +912,15 @@ Path Planning    & Python Program          & Pareto Evolution \\
 \end{tabular}
 \end{center}}
 \end{table}
+\begin{figure}
+    \centering
+    \begin{overpic}[width=0.45\linewidth, keepaspectratio]{figures/meme4.jpg}
+        \put(-40,35){\Medium Wait, it's all}
+        \put(-40,28){\Medium program}
+        \put(-40,21){\Medium learning?}
+        \put(105,30){\Medium \red{Always has been.}}
+    \end{overpic}
+\end{figure}
 \end{frame}
 
 \begin{frame}[plain]{}
@@ -917,19 +940,9 @@ Path Planning    & Python Program          & Pareto Evolution \\
   \vfill
 \end{frame}
 
-\begin{frame}[plain, noframenumbering]
-  \centering
-  \printbibliography
-\end{frame}
-
-\begin{frame}{Population Dynamics: Baldur's Gate}
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/baldurs_pheno_50.pdf}
-\end{frame}
-
-
 \begin{frame}{Research Questions}
   \begin{vfilleditems}
-    \item {\Huge Is Genetic Programming Competitive in 2021? {\color{pureminimalistic@text@red} Yes.}}
+    \item {\Huge Are these research questions? {\color{pureminimalistic@text@red} Answer.}}
     % TODO: Answer each at high level
     {\color{grey}
     \item {\Huge Is crossover necessary?}
@@ -961,13 +974,9 @@ Path Planning    & Python Program          & Pareto Evolution \\
     \end{vfilleditems}
 \end{frame}
 
-\end{document}
+\begin{frame}[plain, noframenumbering]
+  \centering
+  \printbibliography
+\end{frame}
 
-% Overlay "Methods" on Mandelbrot
-% \begin{frame}[plain, noframenumbering]{}
-%   \vspace*{-4em}
-%   \hspace*{-4em}
-%   \begin{overpic}[width=1.2\linewidth,keepaspectratio]{figures/mandelbrot_2.jpg}
-%    \put (60,45) {\red{\Huge Methods}}
-%   \end{overpic}
-% \end{frame}
+\end{document}
