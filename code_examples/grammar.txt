@@ -1,0 +1,13 @@
+expr        = atom   | binary | unary      | compare
+stmt        = assign | return | logic_stmt | ast_expr
+funcname    = sin    | cos    | uniform ..
+local       = x      | y      | goal ..
+binop       = Add    | Sub    | Mult | Div | Mod..
+compop      = Eq     | NotEq  | Lt   | LtE | Is..
+unaryop     = UAdd   | USub   | Not  | Inv
+boolop      = And    | Or
+constant    = -10 .. -1 | 0 | 1 .. 10
+binary      = [atom binop expr]
+unary       = [unaryop expr]
+compare     = [atom compops atoms]
+if          = [expr body body]

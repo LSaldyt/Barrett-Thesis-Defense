@@ -11,7 +11,7 @@
 \usepackage[export]{adjustbox}
 \usepackage[percent]{overpic}
 \usepackage{epigraph}
-\usepackage{listings}
+
 
 \DeclareMathOperator*{\argmin}{\arg\!\min}
 \DeclareMathOperator*{\argmax}{\arg\!\max}
@@ -52,6 +52,60 @@
 
 \definecolor{code}{RGB}{52, 219, 235}
 \newcommand{\plnr}[1]{{\color{code}$#1$}}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.0,0.0,0.0}
+
+\usepackage{fontspec}
+\newfontfamily\UbuntuMonospace{Ubuntu Mono}
+
+\lstdefinestyle{python_black}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{c4},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    % basicstyle=\ttfamily\footnotesize,
+    basicstyle=\Medium\UbuntuMonospace,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    emph={build, sample, run, rrt_extend}, % Custom highlighting
+    emphstyle=\ttb\color{pureminimalistic@text@red},    % Custom highlighting style
+}
+
+\lstset{style=python_black}
+
+\lstdefinelanguage{Grammar}
+    {morekeywords={expr, funcname, local, constant, binary, unary, compare, stmt, if, binop, unaryop, boolop, compop, atom, compops, assign, return, logic_stmt, ast_expr, body, atoms},
+    keywordstyle=\color{c4},
+    sensitive=false,
+    emph={sin, cos, uniform, gauss, x, y, goal, Add, Sub, Mult, Div, Mod, Pow, UAdd, USub, Not, Invert, And, Or, Eq, NotEq, Lt, LtE, Gt, GtE, Is}, % Custom highlighting
+    emphstyle=\ttb\cb,    % Custom highlighting style
+    }
+
+\lstnewenvironment{fslisting}
+  {
+    \lstset{
+        language=Grammar,
+        basicstyle=\Medium\UbuntuMonospace,
+        breakatwhitespace=false,         
+        columns=fullflexible}
+  }
+  {
+  }
 
 \title[Environment Learning for Planning]{Environment Learning for Robot Path-Planning}
 \author{Lucas Saldyt}
@@ -664,23 +718,15 @@
 %   \end{columns}
 % \end{frame}
 
-\begin{frame}{Evolvable Python Programs}
-  \begin{columns}[T]
-      \begin{column}{.5\linewidth}
-      \begin{lstlisting}[language=Python]
-          def build(K=1000):
-              tree = Tree()
-              for k in range(K):
-                  rrt_extend(tree)
-              return tree
-          import numpy as np
-      \end{lstlisting}
-      Representation
-      \end{column}
-      \begin{column}{.5\linewidth}
-      Mutation
-      \end{column}
-  \end{columns}
+\begin{frame}[fragile]\frametitle{Evolvable Python Programs}
+  \lstinputlisting[language=Python]{code_examples/rrt_example.py}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{Evolvable Python Grammar}
+  \lstinputlisting[language=Grammar]{code_examples/grammar.txt}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{Evolvable Python Programs}
 \end{frame}
 
 % \begin{frame}{Pareto Evolution}
