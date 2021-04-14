@@ -18,11 +18,7 @@
 
 \usetheme[showmaxslides, darkmode]{pureminimalistic}
 
-\usepackage[american]{babel}
 \usepackage{csquotes}
-% \usepackage[style=apa, backend=biber]{biblatex}
-% \DeclareLanguageMapping{american}{american-UoN}
-
 \usepackage[english]{babel}
 \usepackage[backend=biber,style=apa]{biblatex}
 \DeclareLanguageMapping{english}{english-apa}
@@ -375,215 +371,215 @@
 %   \end{figure}
 % \end{frame}
 
-\begin{frame}[plain]{\white{Program Synthesis}}
-  % Searching program space exhaustively is impossible, because of Turing's halting problem.
-  % (pause)
-  % However, the work of Lenat and Schmidhuber explore 
-  %   "universal problem solving".
-  %   If program space can be traversed efficiently, universal problem solvers can be created.
-  % This is the high-level theory and motivation behind program synthesis.
-  \begin{columns}[T]
-      \begin{column}{.5\linewidth}
-          \vspace{1em}
-          \emphasis{Kolmogorov}
-          \newline
-          \begin{itemize}
-              \item Searching program space \textit{exhaustively} is impossible (\cc{Turing:} Halting Problem)
-          \end{itemize}
-          \onslide<2->{
-          \emphasis{Lenat}
-          \newline
-          \begin{itemize}
-              \item Universal problem solvers
-          \end{itemize}
-          \emphasis{Schmidhuber}
-          \newline
-          \begin{itemize}
-              \item Optimal Ordered Solvers
-          \end{itemize}
-          }
-      \end{column}
-      \begin{column}{.5\linewidth}
-          \begin{figure}
-              \vspace{-3.5em}
-              \hspace*{1.3em}
-              \rotatebox[origin=c]{-90}{\includegraphics[height=1.0\linewidth,keepaspectratio]{figures/mandelbrot.jpg}}
-          \end{figure}
-      \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}[plain]{\white{Program Synthesis}}
-  % In practice, program synthesis is difficult, but effective.
-  % Perhaps the best survey paper on the subject is by Sumit Gulwani et al, of Microsoft Research.
-  % (pause)
-  % My favorite example of program synthesis is a paper by Brendan Lake, Ruslan Salakhutdinov, and Joshua Tenenbaum.
-  % In this paper, a powerful program representation is learned using a combination of bayesian inference and gradient methods.
-  % The core takeaway from this paper is simply that *learned representation matters*
-  
-  % However, the core inspiration for this thesis is a paper by Google Brain,
-  %   written by Real et al, and I'll go into more detail in a minute.
-  \begin{columns}[T]
-      \begin{column}{.5\linewidth}
-          \vspace{1em}
-          \emphasis{\cite{gulwani2017program}}
-          \begin{itemize}
-              \onslide<1->{\item Best Survey Paper}
-          \end{itemize}
-          \vspace{1em}
-          \emphasis{\cite{lake2015human}}
-          \begin{itemize}
-              \onslide<2->{\item Bayesian Program Learning
-              \item Representation matters}
-          \end{itemize}
-          \vspace{1em}
-          \emphasis{\cite{real2020automl}}
-          \begin{itemize}
-              \onslide<3->{
-              \item Tensor Program Learning 
-              \item Core Thesis Inspiration}
-          \end{itemize}
-      \end{column}
-      \begin{column}{.5\linewidth}
-          \begin{figure}
-              \vspace{-3.5em}
-              \hspace*{1.3em}
-              \rotatebox[origin=c]{-90}{\includegraphics[height=1.0\linewidth,keepaspectratio]{figures/mandelbrot.jpg}}
-          \end{figure}
-      \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}{Evolutionary/Genetic Algorithms}
-  % The most relevant type of program synthesis is via Evolutionary algorithms
-  % Using this is known as evolutionary programming.
-  % 
-  % In a nutshell, an evolutionary algorithm keeps a population
-  %   of solutions, called members, which are being optimized for a particular goal.
-  % Members are *encoded*, for instance as a vector of numbers or as computer programs.
-  % If the encoding is a computer program, then the algorithm is doing evolutionary programming
-  % 
-  % Optimization is accomplished by *selecting* population members based on
-  %   their *fitness* score, which is their performance on some goal.
-  %
-  % Mutation and crossover play an important role in this process.
-  % Mutation refers to randomly changing a member of the population.
-  % Crossover refers to combining two members of the population, which is
-  %   an analogy to how human DNA is recombined.
-  % 
-  % On the right is a small evolutionary experiment.
-  % Members are represented as points in space
-  % Points are selected for based on fitness, which is the sum of their x and y components.
-  % They are mutated by randomly regenerating a single coordinate.
-  % The "After" figure shows three applications of selection.
-  % As you can see, the average fitness of the population increases over time via this method.
-  \begin{columns}[T]
-      \begin{column}{.4\linewidth}
-      \Huge \textit{\cb{Population Optimization}}
-      \begin{vfilleditems}
-          \item \Huge Selection
-          \item \Huge Mutation
-          \item \Huge Crossover
-      \end{vfilleditems}
-      \end{column}
-      \begin{column}{.6\linewidth}
-          \begin{figure}
-              \centering
-              \includegraphics[width=0.95\linewidth, keepaspectratio]{figures/genetic_diagram.pdf}
-          \end{figure}
-      \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}[plain]{}
-  % First, consider this:
-  % Many problems are actually program learning in disguise.
-  % How can we classify these problems?
-  \centering
-  \vfill
-  \red{\fontsize{40}{50}\selectfont Approach Classification}
-  \vfill
-\end{frame}
-
-\begin{frame}{Approach Template Example}
-  % Here, I've created a template which fits many important problems in computer science.
-
-  % Now consider how a convolutional neural network might fit into this framework
-  % First, there is an engineering problem, for example: Image Classification
-  % Then, there is a choice of representation, for example: Neural Network Weights
-  % Finally, there is a choice of optimization, for example: Gradient Methods
-  % I'll use this template to explain previous work, as well as my own.
-   \begin{columns}[T]
-      \begin{tabular}{ll}
-           {\Huge Problem}        &  \onslide<2->{\cb{\Huge Image Classification}}  \\
-           &\\
-           {\Huge Representation} & \onslide<3->{\cc{\Huge Network Weights}} \\
-           &\\
-           {\Huge Optimization}   & \onslide<4->{\ce{\Huge Gradient Methods}} \\
-      \end{tabular}
-  \end{columns}
-\end{frame}
-
-
-\begin{frame}[plain]{}
-  % That was an example of machine learning
-  % Now, consider the word Meta, as in Meta-learning.
-  % Reffering to itself, or to the conventions of its genre; *Self-Referential*
-  \centering
-  \vfill
-  \red{\fontsize{40}{50}\selectfont "Meta"}
-  \vfill
-  \Large Referring to itself or to the conventions of its genre; \cc{self-referential} \gr{(Wikipedia Definition)}
-\end{frame}
-
-\begin{frame}{AutoML-Zero: Evolving Machine Learning Algorithms From Scratch \white{\cite{real2020automl}}}
-  % AutoML-Zero, by Real et al, is an example of Meta-Learning.
-  % Instead of learning a task directly, it attempts to learn how to do machine learning.
-  % Also, it makes very few assumptions, and attempts to start from scratch.
-  %
-  % Consider how this fits into the approach template:
-  %   The subtask is image-classification on CIFAR-10, which is conventionally done
-  %     with a convolutional neural network.
-  %   To meta-learn how to do classification, this paper represents neural networks via a
-  %     **Tensor Register Machine**. This is their program representation.
-  %   This program representation is optimized via Regularized Evolution, which is 
-  %     an evolutionary algorithm.
-    \begin{vfilleditems}
-        \item \cb{\Huge Learns ML practices on CIFAR-10}
-        \vspace{0.7em}
-        \item \cc{\Huge Tensor register machine}
-        \vspace{0.7em}
-        \item \ce{\Huge Regularized Evolution}
-    \end{vfilleditems}
-\end{frame}
-
-\begin{frame}{Regularized Evolution}
-  % Regularized Evolution is a fast, stable method for population optimization.
-  % Crucially, Regularized Evolution uses *aging*.
-  % The population is represented as a queue, with young members at the start and old members at the end.
-  % Every iteration, Reg. Ev. samples a subset of the population.
-  % The best member is selected from this sample.
-  % Then, the oldest member of the population is discarded.
-    \includegraphics[width=0.95\linewidth, keepaspectratio]{figures/regev.pdf}
-\end{frame}
-
-\begin{frame}[plain]{AutoML-Zero \white{\cite{real2020automl}}}
-  % Here is the central result of the AutoML-Zero paper.
-  % The y-axis shows the accuracy of the best-learned image classifier.
-  % The x-axis shows the number of potential learning algorithms that have been evaluated.
-  % Note that the x-axis is logarithmic.
-  % Because of this, Google considers 10 billion algorithms before they reach the first promising one
-  % Then, between considering 10 billion and one trillion algorithms,
-  %   the best-found image classification model gradually improves.
-  % Improvements come from the algorithm finding various machine learning practices.
-  % First, a linear model is learned.
-  % Then, stochastic gradient descent is learned.
-  % Eventually, a competitive modern classifier is evolved.
-    \begin{figure}
-        \centering
-        \includegraphics[scale=0.37]{figures/automl_zero_main_fig.png}
-    \end{figure}
-\end{frame}
+% \begin{frame}[plain]{\white{Program Synthesis}}
+%   % Searching program space exhaustively is impossible, because of Turing's halting problem.
+%   % (pause)
+%   % However, the work of Lenat and Schmidhuber explore 
+%   %   "universal problem solving".
+%   %   If program space can be traversed efficiently, universal problem solvers can be created.
+%   % This is the high-level theory and motivation behind program synthesis.
+%   \begin{columns}[T]
+%       \begin{column}{.5\linewidth}
+%           \vspace{1em}
+%           \emphasis{Kolmogorov}
+%           \newline
+%           \begin{itemize}
+%               \item Searching program space \textit{exhaustively} is impossible (\cc{Turing:} Halting Problem)
+%           \end{itemize}
+%           \onslide<2->{
+%           \emphasis{Lenat}
+%           \newline
+%           \begin{itemize}
+%               \item Universal problem solvers
+%           \end{itemize}
+%           \emphasis{Schmidhuber}
+%           \newline
+%           \begin{itemize}
+%               \item Optimal Ordered Solvers
+%           \end{itemize}
+%           }
+%       \end{column}
+%       \begin{column}{.5\linewidth}
+%           \begin{figure}
+%               \vspace{-3.5em}
+%               \hspace*{1.3em}
+%               \rotatebox[origin=c]{-90}{\includegraphics[height=1.0\linewidth,keepaspectratio]{figures/mandelbrot.jpg}}
+%           \end{figure}
+%       \end{column}
+%   \end{columns}
+% \end{frame}
+% 
+% \begin{frame}[plain]{\white{Program Synthesis}}
+%   % In practice, program synthesis is difficult, but effective.
+%   % Perhaps the best survey paper on the subject is by Sumit Gulwani et al, of Microsoft Research.
+%   % (pause)
+%   % My favorite example of program synthesis is a paper by Brendan Lake, Ruslan Salakhutdinov, and Joshua Tenenbaum.
+%   % In this paper, a powerful program representation is learned using a combination of bayesian inference and gradient methods.
+%   % The core takeaway from this paper is simply that *learned representation matters*
+%   
+%   % However, the core inspiration for this thesis is a paper by Google Brain,
+%   %   written by Real et al, and I'll go into more detail in a minute.
+%   \begin{columns}[T]
+%       \begin{column}{.5\linewidth}
+%           \vspace{1em}
+%           \emphasis{\cite{gulwani2017program}}
+%           \begin{itemize}
+%               \onslide<1->{\item Best Survey Paper}
+%           \end{itemize}
+%           \vspace{1em}
+%           \emphasis{\cite{lake2015human}}
+%           \begin{itemize}
+%               \onslide<2->{\item Bayesian Program Learning
+%               \item Representation matters}
+%           \end{itemize}
+%           \vspace{1em}
+%           \emphasis{\cite{real2020automl}}
+%           \begin{itemize}
+%               \onslide<3->{
+%               \item Tensor Program Learning 
+%               \item Core Thesis Inspiration}
+%           \end{itemize}
+%       \end{column}
+%       \begin{column}{.5\linewidth}
+%           \begin{figure}
+%               \vspace{-3.5em}
+%               \hspace*{1.3em}
+%               \rotatebox[origin=c]{-90}{\includegraphics[height=1.0\linewidth,keepaspectratio]{figures/mandelbrot.jpg}}
+%           \end{figure}
+%       \end{column}
+%   \end{columns}
+% \end{frame}
+% 
+% \begin{frame}{Evolutionary/Genetic Algorithms}
+%   % The most relevant type of program synthesis is via Evolutionary algorithms
+%   % Using this is known as evolutionary programming.
+%   % 
+%   % In a nutshell, an evolutionary algorithm keeps a population
+%   %   of solutions, called members, which are being optimized for a particular goal.
+%   % Members are *encoded*, for instance as a vector of numbers or as computer programs.
+%   % If the encoding is a computer program, then the algorithm is doing evolutionary programming
+%   % 
+%   % Optimization is accomplished by *selecting* population members based on
+%   %   their *fitness* score, which is their performance on some goal.
+%   %
+%   % Mutation and crossover play an important role in this process.
+%   % Mutation refers to randomly changing a member of the population.
+%   % Crossover refers to combining two members of the population, which is
+%   %   an analogy to how human DNA is recombined.
+%   % 
+%   % On the right is a small evolutionary experiment.
+%   % Members are represented as points in space
+%   % Points are selected for based on fitness, which is the sum of their x and y components.
+%   % They are mutated by randomly regenerating a single coordinate.
+%   % The "After" figure shows three applications of selection.
+%   % As you can see, the average fitness of the population increases over time via this method.
+%   \begin{columns}[T]
+%       \begin{column}{.4\linewidth}
+%       \Huge \textit{\cb{Population Optimization}}
+%       \begin{vfilleditems}
+%           \item \Huge Selection
+%           \item \Huge Mutation
+%           \item \Huge Crossover
+%       \end{vfilleditems}
+%       \end{column}
+%       \begin{column}{.6\linewidth}
+%           \begin{figure}
+%               \centering
+%               \includegraphics[width=0.95\linewidth, keepaspectratio]{figures/genetic_diagram.pdf}
+%           \end{figure}
+%       \end{column}
+%   \end{columns}
+% \end{frame}
+% 
+% \begin{frame}[plain]{}
+%   % First, consider this:
+%   % Many problems are actually program learning in disguise.
+%   % How can we classify these problems?
+%   \centering
+%   \vfill
+%   \red{\fontsize{40}{50}\selectfont Approach Classification}
+%   \vfill
+% \end{frame}
+% 
+% \begin{frame}{Approach Template Example}
+%   % Here, I've created a template which fits many important problems in computer science.
+% 
+%   % Now consider how a convolutional neural network might fit into this framework
+%   % First, there is an engineering problem, for example: Image Classification
+%   % Then, there is a choice of representation, for example: Neural Network Weights
+%   % Finally, there is a choice of optimization, for example: Gradient Methods
+%   % I'll use this template to explain previous work, as well as my own.
+%    \begin{columns}[T]
+%       \begin{tabular}{ll}
+%            {\Huge Problem}        &  \onslide<2->{\cb{\Huge Image Classification}}  \\
+%            &\\
+%            {\Huge Representation} & \onslide<3->{\cc{\Huge Network Weights}} \\
+%            &\\
+%            {\Huge Optimization}   & \onslide<4->{\ce{\Huge Gradient Methods}} \\
+%       \end{tabular}
+%   \end{columns}
+% \end{frame}
+% 
+% 
+% \begin{frame}[plain]{}
+%   % That was an example of machine learning
+%   % Now, consider the word Meta, as in Meta-learning.
+%   % Reffering to itself, or to the conventions of its genre; *Self-Referential*
+%   \centering
+%   \vfill
+%   \red{\fontsize{40}{50}\selectfont "Meta"}
+%   \vfill
+%   \Large Referring to itself or to the conventions of its genre; \cc{self-referential} \gr{(Wikipedia Definition)}
+% \end{frame}
+% 
+% \begin{frame}{AutoML-Zero: Evolving Machine Learning Algorithms From Scratch \white{\cite{real2020automl}}}
+%   % AutoML-Zero, by Real et al, is an example of Meta-Learning.
+%   % Instead of learning a task directly, it attempts to learn how to do machine learning.
+%   % Also, it makes very few assumptions, and attempts to start from scratch.
+%   %
+%   % Consider how this fits into the approach template:
+%   %   The subtask is image-classification on CIFAR-10, which is conventionally done
+%   %     with a convolutional neural network.
+%   %   To meta-learn how to do classification, this paper represents neural networks via a
+%   %     **Tensor Register Machine**. This is their program representation.
+%   %   This program representation is optimized via Regularized Evolution, which is 
+%   %     an evolutionary algorithm.
+%     \begin{vfilleditems}
+%         \item \cb{\Huge Learns ML practices on CIFAR-10}
+%         \vspace{0.7em}
+%         \item \cc{\Huge Tensor register machine}
+%         \vspace{0.7em}
+%         \item \ce{\Huge Regularized Evolution}
+%     \end{vfilleditems}
+% \end{frame}
+% 
+% \begin{frame}{Regularized Evolution}
+%   % Regularized Evolution is a fast, stable method for population optimization.
+%   % Crucially, Regularized Evolution uses *aging*.
+%   % The population is represented as a queue, with young members at the start and old members at the end.
+%   % Every iteration, Reg. Ev. samples a subset of the population.
+%   % The best member is selected from this sample.
+%   % Then, the oldest member of the population is discarded.
+%     \includegraphics[width=0.95\linewidth, keepaspectratio]{figures/regev.pdf}
+% \end{frame}
+% 
+% \begin{frame}[plain]{AutoML-Zero \white{\cite{real2020automl}}}
+%   % Here is the central result of the AutoML-Zero paper.
+%   % The y-axis shows the accuracy of the best-learned image classifier.
+%   % The x-axis shows the number of potential learning algorithms that have been evaluated.
+%   % Note that the x-axis is logarithmic.
+%   % Because of this, Google considers 10 billion algorithms before they reach the first promising one
+%   % Then, between considering 10 billion and one trillion algorithms,
+%   %   the best-found image classification model gradually improves.
+%   % Improvements come from the algorithm finding various machine learning practices.
+%   % First, a linear model is learned.
+%   % Then, stochastic gradient descent is learned.
+%   % Eventually, a competitive modern classifier is evolved.
+%     \begin{figure}
+%         \centering
+%         \includegraphics[scale=0.37]{figures/automl_zero_main_fig.png}
+%     \end{figure}
+% \end{frame}
 
 \begin{frame}{Environment Learning for Path-Planning}
     \begin{vfilleditems}
@@ -595,78 +591,78 @@
     \end{vfilleditems}
 \end{frame}
 
-\begin{frame}{{\color{pureminimalistic@text@white} Multiple Objectives}}
-  % Path Planning has multiple objectives.
-  %   In the most basic form, these are the number of nodes considered, and the length of the eventual path.
-  % However, other metrics, like exploration, can be relevant, but the main point 
-  %   is that there are multiple objectives.
-  % On the right is a plot, where each point is a computer program.
-  % The x-axis is the number of nodes considered, 
-  %   and the y-axis is the path length.
-  % Each point is labeled with its *age*, or the iteration that it was found at.
-  
-  % The total array of points forms an interesting distribution, where no single point is perfect, and instead algorithms make trade-offs with one-another.
-  \begin{columns}[T]
-      \begin{column}{.4\linewidth}
-          \emphasis{Nodes}
-          \vspace{1em}
-          \newline
-          \emphasis{Path Length}
-          \vspace{1em}
-          \newline
-          \emphasis{Exploration}
-          \newline
-          \vspace*{1em}
-          \begin{center}
-          \emphasis{\ldots }
-          \end{center}
-      \end{column}
-      \begin{column}{.6\linewidth}
-      \includegraphics[width=0.9\linewidth, keepaspectratio]{figures/total_overview.pdf}
-      \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}{Pareto Fronts}
-  % These trade-offs are defined in the form of *Pareto Fronts*.
-  
-  % First, each algorithm is evaluated by a _fitness_,
-  %   which is a vector because there are multiple objectives.
-  % Pareto equivalence is defined by an ordering on fitness vectors.
-  % If one fitness vector is not strictly superior in all elements,
-  %   Then it is said to be Pareto-equivalent to another.
-  % For example, v1 and v2 are Pareto-equivalent because while
-  %   v1 has the shortest path, v2 considers fewer nodes.
-  % In the same way, v3 is also pareto-equivalent
-  % Because these three members are pareto-equivalent, they are placed in the first pareto front.
-  % However, v4 is not, because v1 strictly outperforms it on both metrics.
-  
-  % These fronts are shown via the curves in this figure. 
-  \begin{columns}[T]
-      \begin{column}{.4\linewidth}
-          \begin{vfilleditems}
-              \item {\Large Vectorized Fitness}
-              \begin{tabular}{ll}
-              &  \\
-              & {\Large $v_i = \{\red{nodes, path}\}$} \\
-              &  \\
-              \end{tabular}
-              \item {\Large Pareto Equivalence}
-              \begin{tabular}{ll}
-              &  \\
-              & {\Large $v_1 = \{\cc{80, 151}\}$} \\
-              & {\Large $v_2 = \{\cc{60, 155}\}$} \\
-              & {\Large $v_3 = \{\cc{50, 165}\}$} \\
-              &  \\
-              & {\Large $v_4 = \{\cb{130, 153}\}$} \\
-              \end{tabular}
-          \end{vfilleditems}
-      \end{column}
-      \begin{column}{.6\linewidth}
-      \includegraphics[width=0.9\linewidth, keepaspectratio]{figures/total_pareto_overview.pdf}
-      \end{column}
-  \end{columns}
-\end{frame}
+% \begin{frame}{{\color{pureminimalistic@text@white} Multiple Objectives}}
+%   % Path Planning has multiple objectives.
+%   %   In the most basic form, these are the number of nodes considered, and the length of the eventual path.
+%   % However, other metrics, like exploration, can be relevant, but the main point 
+%   %   is that there are multiple objectives.
+%   % On the right is a plot, where each point is a computer program.
+%   % The x-axis is the number of nodes considered, 
+%   %   and the y-axis is the path length.
+%   % Each point is labeled with its *age*, or the iteration that it was found at.
+%   
+%   % The total array of points forms an interesting distribution, where no single point is perfect, and instead algorithms make trade-offs with one-another.
+%   \begin{columns}[T]
+%       \begin{column}{.4\linewidth}
+%           \emphasis{Nodes}
+%           \vspace{1em}
+%           \newline
+%           \emphasis{Path Length}
+%           \vspace{1em}
+%           \newline
+%           \emphasis{Exploration}
+%           \newline
+%           \vspace*{1em}
+%           \begin{center}
+%           \emphasis{\ldots }
+%           \end{center}
+%       \end{column}
+%       \begin{column}{.6\linewidth}
+%       \includegraphics[width=0.9\linewidth, keepaspectratio]{figures/total_overview.pdf}
+%       \end{column}
+%   \end{columns}
+% \end{frame}
+% 
+% \begin{frame}{Pareto Fronts}
+%   % These trade-offs are defined in the form of *Pareto Fronts*.
+%   
+%   % First, each algorithm is evaluated by a _fitness_,
+%   %   which is a vector because there are multiple objectives.
+%   % Pareto equivalence is defined by an ordering on fitness vectors.
+%   % If one fitness vector is not strictly superior in all elements,
+%   %   Then it is said to be Pareto-equivalent to another.
+%   % For example, v1 and v2 are Pareto-equivalent because while
+%   %   v1 has the shortest path, v2 considers fewer nodes.
+%   % In the same way, v3 is also pareto-equivalent
+%   % Because these three members are pareto-equivalent, they are placed in the first pareto front.
+%   % However, v4 is not, because v1 strictly outperforms it on both metrics.
+%   
+%   % These fronts are shown via the curves in this figure. 
+%   \begin{columns}[T]
+%       \begin{column}{.4\linewidth}
+%           \begin{vfilleditems}
+%               \item {\Large Vectorized Fitness}
+%               \begin{tabular}{ll}
+%               &  \\
+%               & {\Large $v_i = \{\red{nodes, path}\}$} \\
+%               &  \\
+%               \end{tabular}
+%               \item {\Large Pareto Equivalence}
+%               \begin{tabular}{ll}
+%               &  \\
+%               & {\Large $v_1 = \{\cc{80, 151}\}$} \\
+%               & {\Large $v_2 = \{\cc{60, 155}\}$} \\
+%               & {\Large $v_3 = \{\cc{50, 165}\}$} \\
+%               &  \\
+%               & {\Large $v_4 = \{\cb{130, 153}\}$} \\
+%               \end{tabular}
+%           \end{vfilleditems}
+%       \end{column}
+%       \begin{column}{.6\linewidth}
+%       \includegraphics[width=0.9\linewidth, keepaspectratio]{figures/total_pareto_overview.pdf}
+%       \end{column}
+%   \end{columns}
+% \end{frame}
 
 \begin{frame}{Evolvable Python Programs}
   \begin{columns}[T]
@@ -687,116 +683,115 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Pareto Evolution}
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/paretoev.pdf}
-\end{frame}
-
-
-\begin{frame}{}
-  \begin{columns}[T]
-      \begin{column}{.5\linewidth}
-        \emphasis{Pareto Ev.} {\color{grey} \Medium (NSGA2)}
-        \begin{itemize}
-            \item Multi-objective
-            \item Bandwidth: {\Large $\cc{n}$}
-        \end{itemize}
-        \vspace{1em}
-        \begin{tabular}{ll}
-        &\onslide<2->{{\Large $O(\ca{g} * \cb{m} * \cc{n}^\red{2})$}}          \\
-        &\onslide<3->{{\Large $O(\cb{m} * \cc{n})$} {\color{grey} per change}} \\
-        &\onslide<4->{{\Large $O(\cb{m} * \cd{p})$} {\color{grey} if sampled}} \\
-        \end{tabular}
-      \end{column}
-      \begin{column}{.5\linewidth}
-        \emphasis{Regularized Ev.}
-        \begin{itemize}
-            \item Single-objective
-            \item Bandwidth: {\Large $\cc{1}$}
-        \end{itemize}
-        \vspace{1em}
-        \begin{tabular}{ll}
-        &\onslide<2->{{\Large $O(\ca{g} * \cd{p})$}}\\
-        &\onslide<3->{{\Large $O(\cd{p})$} {\color{grey} per change}}\\
-        &\onslide<4->{{\Large $O(\cd{p})$} {\color{grey} (sampled)}} \\
-        \end{tabular}
-      \end{column}
-  \end{columns}
-  \begin{center}
-  \Large
-      \onslide<2->{
-      \begin{tabular}{ll}
-        Where & \ca{$g = $ generations} \\
-              & \cb{$m = $ objectives}  \\
-              & \cc{$n = $ total population size}\\
-              & \cd{$p = $ sample size}\\
-     \end{tabular}
-     }
-  \end{center}
-\end{frame}
-
-\begin{frame}{Population Dynamics: Starcraft Engima}
-  % Here is an example of the population dynamics of an optimization run.
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/pheno.pdf}
-\end{frame}
-
-\begin{frame}{Specialization Results}
-    % Here are the results of specializing algorithms to particular maps.
-    % This experiment looked at five different scenarios:
-    %   Milan, Italy, which is a relatively cluttered map
-    %   A blank map,  which is intentionally open and easy to specialize to.
-    %   A validation map, which is highly cluttered and tight.
-    % The main experiment used three starcraft maps: Enigma, Turbo, and Entanglement.
-    % More starcraft maps have been used in other experiments
-    
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/show_maps_exp.pdf}
-\end{frame}
-
-\begin{frame}{Specialization Results}
-    % This is an overview of all specialized algorithms.
-    % Simply note their different behaviors.
-    % Now, I'll go through them in depth.
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned.pdf}
-\end{frame}
-
-\begin{frame}{Milan Best/Worst}
-    % On the Milan map, the best planner learned *NOT* to bias towards the goal,
-    % And instead learned to take very large steps.
-    % The worst Milan planner was one which takes very small steps, but eventually covers the search space very evenly.
-    
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned_split_0.pdf}
-\end{frame}
-
-\begin{frame}{Enigma/Entangle. Convergent Evolution}
-    % Next, there is the best planner on the Enigma map, planner 49980, on the left. 
-    % This planner biases towards the goal 13% of the time, and considers 75% fewer nodes than the baseline planner.
-    % MOST significantly, this planner is exactly the same as planner c5b4f, which
-    %   evolved as the best-in-class planner on the Entanglement map. 
-    % This is an example of convergent evolution.
-    % Finding situations like this is the core goal of this thesis.
-    % (pause)
-    \centering
-    \vspace{-0.1}
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned_split_1.pdf}
-\end{frame}
-
-\begin{frame}{49980 Validation Example}
-    % Here is a quick validation run showing how a single attempt differed from the initial baseline.
-    % Essentially, it considers fewer nodes and stops early.
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned_split_2.pdf}
-\end{frame}
-
-\begin{frame}{Turbo and No-Obstacles}
-    % Alternatively, the Turbo planner learns to bias towards the goal roughly half the time, presumably because the space is so open.
-    % Finally, the blank map planner learns to bias 89% of the time, because the open map allows it to do so.
-    % This acted as a control for the other experiments
-    % These results were the first preliminary indication that goal-specialization was succeeding.
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned_split_3.pdf}
-\end{frame}
-
-
-\begin{frame}{Blank Validation}
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/blank_val.pdf}
-\end{frame}
+% \begin{frame}{Pareto Evolution}
+%     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/paretoev.pdf}
+% \end{frame}
+% 
+% \begin{frame}{}
+%   \begin{columns}[T]
+%       \begin{column}{.5\linewidth}
+%         \emphasis{Pareto Ev.} {\color{grey} \Medium (NSGA2)}
+%         \begin{itemize}
+%             \item Multi-objective
+%             \item Bandwidth: {\Large $\cc{n}$}
+%         \end{itemize}
+%         \vspace{1em}
+%         \begin{tabular}{ll}
+%         &\onslide<2->{{\Large $O(\ca{g} * \cb{m} * \cc{n}^\red{2})$}}          \\
+%         &\onslide<3->{{\Large $O(\cb{m} * \cc{n})$} {\color{grey} per change}} \\
+%         &\onslide<4->{{\Large $O(\cb{m} * \cd{p})$} {\color{grey} if sampled}} \\
+%         \end{tabular}
+%       \end{column}
+%       \begin{column}{.5\linewidth}
+%         \emphasis{Regularized Ev.}
+%         \begin{itemize}
+%             \item Single-objective
+%             \item Bandwidth: {\Large $\cc{1}$}
+%         \end{itemize}
+%         \vspace{1em}
+%         \begin{tabular}{ll}
+%         &\onslide<2->{{\Large $O(\ca{g} * \cd{p})$}}\\
+%         &\onslide<3->{{\Large $O(\cd{p})$} {\color{grey} per change}}\\
+%         &\onslide<4->{{\Large $O(\cd{p})$} {\color{grey} (sampled)}} \\
+%         \end{tabular}
+%       \end{column}
+%   \end{columns}
+%   \begin{center}
+%   \Large
+%       \onslide<2->{
+%       \begin{tabular}{ll}
+%         Where & \ca{$g = $ generations} \\
+%               & \cb{$m = $ objectives}  \\
+%               & \cc{$n = $ total population size}\\
+%               & \cd{$p = $ sample size}\\
+%      \end{tabular}
+%      }
+%   \end{center}
+% \end{frame}
+% 
+% \begin{frame}{Population Dynamics: Starcraft Engima}
+%   % Here is an example of the population dynamics of an optimization run.
+%     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/pheno.pdf}
+% \end{frame}
+% 
+% \begin{frame}{Specialization Results}
+%     % Here are the results of specializing algorithms to particular maps.
+%     % This experiment looked at five different scenarios:
+%     %   Milan, Italy, which is a relatively cluttered map
+%     %   A blank map,  which is intentionally open and easy to specialize to.
+%     %   A validation map, which is highly cluttered and tight.
+%     % The main experiment used three starcraft maps: Enigma, Turbo, and Entanglement.
+%     % More starcraft maps have been used in other experiments
+%     
+%     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/show_maps_exp.pdf}
+% \end{frame}
+% 
+% \begin{frame}{Specialization Results}
+%     % This is an overview of all specialized algorithms.
+%     % Simply note their different behaviors.
+%     % Now, I'll go through them in depth.
+%     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned.pdf}
+% \end{frame}
+% 
+% \begin{frame}{Milan Best/Worst}
+%     % On the Milan map, the best planner learned *NOT* to bias towards the goal,
+%     % And instead learned to take very large steps.
+%     % The worst Milan planner was one which takes very small steps, but eventually covers the search space very evenly.
+%     
+%     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned_split_0.pdf}
+% \end{frame}
+% 
+% \begin{frame}{Enigma/Entangle. Convergent Evolution}
+%     % Next, there is the best planner on the Enigma map, planner 49980, on the left. 
+%     % This planner biases towards the goal 13% of the time, and considers 75% fewer nodes than the baseline planner.
+%     % MOST significantly, this planner is exactly the same as planner c5b4f, which
+%     %   evolved as the best-in-class planner on the Entanglement map. 
+%     % This is an example of convergent evolution.
+%     % Finding situations like this is the core goal of this thesis.
+%     % (pause)
+%     \centering
+%     \vspace{-0.1}
+%     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned_split_1.pdf}
+% \end{frame}
+% 
+% \begin{frame}{49980 Validation Example}
+%     % Here is a quick validation run showing how a single attempt differed from the initial baseline.
+%     % Essentially, it considers fewer nodes and stops early.
+%     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned_split_2.pdf}
+% \end{frame}
+% 
+% \begin{frame}{Turbo and No-Obstacles}
+%     % Alternatively, the Turbo planner learns to bias towards the goal roughly half the time, presumably because the space is so open.
+%     % Finally, the blank map planner learns to bias 89% of the time, because the open map allows it to do so.
+%     % This acted as a control for the other experiments
+%     % These results were the first preliminary indication that goal-specialization was succeeding.
+%     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned_split_3.pdf}
+% \end{frame}
+% 
+% 
+% \begin{frame}{Blank Validation}
+%     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/blank_val.pdf}
+% \end{frame}
 
 % \begin{frame}{Milan Validation}
 %     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/milan_val.pdf}
@@ -940,39 +935,39 @@ Path Planning    & Python Program          & Pareto Evolution \\
   \vfill
 \end{frame}
 
-\begin{frame}{Research Questions}
-  \begin{vfilleditems}
-    \item {\Huge Are these research questions? {\color{pureminimalistic@text@red} Answer.}}
-    % TODO: Answer each at high level
-    {\color{grey}
-    \item {\Huge Is crossover necessary?}
-    \item {\Huge What is the role of latent code?}
-    \item {\Huge How should code be mutated?}
-    \item {\Huge How hard is a problem?}
-    }
-  \end{vfilleditems}
-\end{frame}
-
-\begin{frame}{Research Questions}
-  \begin{vfilleditems}
-    \item {\Huge Role of program representation?}
-    \item {\Huge Role of scale and compute efficiency?}
-    \item {\Huge How should code be mutated?}
-    \item {\Huge How hard is a problem?}
-  \end{vfilleditems}
-\end{frame}
-
-\begin{frame}{Challenges Faced}
-    \begin{vfilleditems}
-    \item \Huge Test
-    \end{vfilleditems}
-\end{frame}
-
-\begin{frame}{Gritty Engineering Work}
-    \begin{vfilleditems}
-    \item \Huge Test
-    \end{vfilleditems}
-\end{frame}
+% \begin{frame}{Research Questions}
+%   \begin{vfilleditems}
+%     \item {\Huge Are these research questions? {\color{pureminimalistic@text@red} Answer.}}
+%     % TODO: Answer each at high level
+%     {\color{grey}
+%     \item {\Huge Is crossover necessary?}
+%     \item {\Huge What is the role of latent code?}
+%     \item {\Huge How should code be mutated?}
+%     \item {\Huge How hard is a problem?}
+%     }
+%   \end{vfilleditems}
+% \end{frame}
+% 
+% \begin{frame}{Research Questions}
+%   \begin{vfilleditems}
+%     \item {\Huge Role of program representation?}
+%     \item {\Huge Role of scale and compute efficiency?}
+%     \item {\Huge How should code be mutated?}
+%     \item {\Huge How hard is a problem?}
+%   \end{vfilleditems}
+% \end{frame}
+% 
+% \begin{frame}{Challenges Faced}
+%     \begin{vfilleditems}
+%     \item \Huge Test
+%     \end{vfilleditems}
+% \end{frame}
+% 
+% \begin{frame}{Gritty Engineering Work}
+%     \begin{vfilleditems}
+%     \item \Huge Test
+%     \end{vfilleditems}
+% \end{frame}
 
 \begin{frame}[plain, noframenumbering]
   \centering
