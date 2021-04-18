@@ -20,6 +20,7 @@
 
 \usepackage{csquotes}
 \usepackage[english]{babel}
+% \usepackage[american]{babel}
 \usepackage[backend=biber,style=apa]{biblatex}
 \DeclareLanguageMapping{english}{english-apa}
 
@@ -56,7 +57,6 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
-\definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.0,0.0,0.0}
@@ -66,7 +66,7 @@
 
 \lstdefinestyle{python_black}{
     backgroundcolor=\color{backcolour},   
-    commentstyle=\color{codegreen},
+    commentstyle=\color{c2},
     keywordstyle=\color{c4},
     numberstyle=\tiny\color{codegray},
     stringstyle=\color{codepurple},
@@ -92,7 +92,7 @@
     {morekeywords={expr, funcname, local, constant, binary, unary, compare, stmt, if, binop, unaryop, boolop, compop, atom, compops, assign, return, logic_stmt, ast_expr, body, atoms},
     keywordstyle=\color{c4},
     sensitive=false,
-    emph={sin, cos, uniform, gauss, x, y, goal, Add, Sub, Mult, Div, Mod, Pow, UAdd, USub, Not, Invert, And, Or, Eq, NotEq, Lt, LtE, Gt, GtE, Is}, % Custom highlighting
+    emph={sin, cos, uniform, gauss, x, y, goal, Add, Sub, Mult, Div, Mod, Pow, UAdd, USub, Not, Invert, And, Or, Eq, NotEq, Lt, LtE, Gt, GtE, Is, Inv}, % Custom highlighting
     emphstyle=\ttb\cb,    % Custom highlighting style
     }
 
@@ -106,6 +106,20 @@
   }
   {
   }
+  
+\lstdefinelanguage{Params}
+    {morekeywords={K, step, rewire, bias, α, a, k, rad},
+    keywordstyle=\cb,
+    sensitive=false,
+    emph={uniform, x, random, y}, % Custom highlighting
+    emphstyle=\ttb\cc,    % Custom highlighting style
+    }
+    
+\lstnewenvironment{fslisting}
+  {\lstset{language=Params,
+           basicstyle=\Medium\UbuntuMonospace,
+           breakatwhitespace=false,         
+           columns=fullflexible}}{}   
 
 \title[Environment Learning for Planning]{Environment Learning for Robot Path-Planning}
 \author{Lucas Saldyt}
@@ -182,7 +196,7 @@
               \item {\Medium Learn overall task proficiency?}
             \end{itemize}
             \vspace{1em}
-            \emphasis{Specialization}
+            \Huge \ce{Specialization}
             \begin{itemize}
               \item {\Medium Learn environment details?}
             \end{itemize}
@@ -388,13 +402,9 @@
     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/show_maps.pdf}
 \end{frame}
 
-\begin{frame}{Specialization Results}
+\begin{frame}{Specialization Teaser}
   % Here is a teaser figure showing the potential for specialization.
   % Four experiments were run on Boston, Baldur's Gate, Dragon Age, and Starcraft maps.
-  % The Boston planner runs relatively well
-  % The Baldurs Gate Planner runs relatively well
-  % The dragon age planner does not. I address this later on.
-  % The starcraft planner does exceptionally well given a difficult problem.
   % That brings us to the methods section of this thesis.
   \begin{columns}[T]
       \begin{column}{.6\linewidth}
@@ -437,21 +447,20 @@
   \begin{columns}[T]
       \begin{column}{.5\linewidth}
           \vspace{1em}
-          \emphasis{Kolmogorov}
-          \newline
+          \emphasis{Kolmogorov} \newline \vspace{-0.5em}
           \begin{itemize}
               \item Searching program space \textit{exhaustively} is impossible (\cc{Turing:} Halting Problem)
           \end{itemize}
           \onslide<2->{
-          \emphasis{Lenat}
-          \newline
-          \begin{itemize}
-              \item Universal problem solvers
-          \end{itemize}
-          \emphasis{Schmidhuber}
-          \newline
+          \emphasis{Schmidhuber} \newline \vspace{-0.5em}
           \begin{itemize}
               \item Optimal Ordered Solvers
+          \end{itemize}
+          }
+          \onslide<3->{
+          \emphasis{Lake \& Tenenbaum} \newline \vspace{-0.5em}
+          \begin{itemize}
+              \item Representation Matters
           \end{itemize}
           }
       \end{column}
@@ -465,45 +474,68 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}[plain]{\white{Program Synthesis}}
-  % In practice, program synthesis is difficult, but effective.
-  % Perhaps the best survey paper on the subject is by Sumit Gulwani et al, of Microsoft Research.
-  % (pause)
-  % My favorite example of program synthesis is a paper by Brendan Lake, Ruslan Salakhutdinov, and Joshua Tenenbaum.
-  % In this paper, a powerful program representation is learned using a combination of bayesian inference and gradient methods.
-  % The core takeaway from this paper is simply that *learned representation matters*
-  
-  % However, the core inspiration for this thesis is a paper by Google Brain,
-  %   written by Real et al, and I'll go into more detail in a minute.
-  \begin{columns}[T]
-      \begin{column}{.5\linewidth}
-          \vspace{1em}
-          \emphasis{\cite{gulwani2017program}}
-          \begin{itemize}
-              \onslide<1->{\item Best Survey Paper}
-          \end{itemize}
-          \vspace{1em}
-          \emphasis{\cite{lake2015human}}
-          \begin{itemize}
-              \onslide<2->{\item Bayesian Program Learning
-              \item Representation matters}
-          \end{itemize}
-          \vspace{1em}
-          \emphasis{\cite{real2020automl}}
-          \begin{itemize}
-              \onslide<3->{
-              \item Tensor Program Learning 
-              \item Core Thesis Inspiration}
-          \end{itemize}
-      \end{column}
-      \begin{column}{.5\linewidth}
-          \begin{figure}
-              \vspace{-3.5em}
-              \hspace*{1.3em}
-              \rotatebox[origin=c]{-90}{\includegraphics[height=1.0\linewidth,keepaspectratio]{figures/mandelbrot.jpg}}
-          \end{figure}
-      \end{column}
+
+\begin{frame}[plain]{}
+  % First, consider this:
+  % Many problems are actually program learning in disguise.
+  % How can we classify these problems?
+  \centering
+  \vfill
+  \red{\fontsize{40}{50}\selectfont Many Problems Are Program Learning In Disguise}
+  \vfill
+\end{frame}
+
+\begin{frame}{Approach Template Example}
+  % Here, I've created a template which fits many important problems in computer science.
+
+  % Now consider how a convolutional neural network might fit into this framework
+  % First, there is an engineering problem, for example: Image Classification
+  % Then, there is a choice of representation, for example: Neural Network Weights
+  % Finally, there is a choice of optimization, for example: Gradient Methods
+  % I'll use this template to explain previous work, as well as my own.
+   \begin{columns}[T]
+      \begin{tabular}{ll}
+           {\Huge Problem}        &  \onslide<2->{\cb{\Huge Image Classification}}  \\
+           &\\
+           {\Huge Representation} & \onslide<3->{\cc{\Huge Network Weights}} \\
+           &\\
+           {\Huge Optimization}   & \onslide<4->{\ce{\Huge Gradient Methods}} \\
+      \end{tabular}
   \end{columns}
+\end{frame}
+
+
+\begin{frame}[plain]{}
+  % That was an example of machine learning
+  % Now, consider the word Meta, as in Meta-learning.
+  % Reffering to itself, or to the conventions of its genre; *Self-Referential*
+  \centering
+  \vfill
+  \red{\fontsize{40}{50}\selectfont ``Meta"}
+  \vfill
+  \Large Referring to itself or to the conventions of its genre; \ce{self-referential} \gr{(Wikipedia Definition)}
+\end{frame}
+
+\begin{frame}{AutoML-Zero: Evolving Machine Learning Algorithms From Scratch \white{\cite{real2020automl}}}
+  % AutoML-Zero, by Real et al, is an example of Meta-Learning.
+  % Instead of learning a task directly, it attempts to learn how to do machine learning.
+  % Also, it makes very few assumptions, and attempts to start from scratch.
+  %
+  % Consider how this fits into the approach template:
+  %   The subtask is image-classification on CIFAR-10, which is conventionally done
+  %     with a convolutional neural network.
+  %   To meta-learn how to do classification, this paper represents neural networks via a
+  %     **Tensor Register Machine**. This is their program representation.
+  %   This program representation is optimized via Regularized Evolution, which is 
+  %     an evolutionary algorithm.
+    \begin{tabular}{ll}
+         {\Huge Problem}        &  \onslide<2->{\cb{\Huge Meta Image }}  \\
+                                &  \onslide<2->{\cb{\Huge Classifier}}  \\
+         &\\
+         {\Huge Representation} & \onslide<3->{\cc{\Huge Tensor Machine}} \\
+         &\\
+         {\Huge Optimization}   & \onslide<4->{\ce{\Huge Reg. Evolution}} \\
+    \end{tabular}
 \end{frame}
 
 \begin{frame}{Evolutionary/Genetic Algorithms}
@@ -547,69 +579,7 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}[plain]{}
-  % First, consider this:
-  % Many problems are actually program learning in disguise.
-  % How can we classify these problems?
-  \centering
-  \vfill
-  \red{\fontsize{40}{50}\selectfont Approach Classification}
-  \vfill
-\end{frame}
-
-\begin{frame}{Approach Template Example}
-  % Here, I've created a template which fits many important problems in computer science.
-
-  % Now consider how a convolutional neural network might fit into this framework
-  % First, there is an engineering problem, for example: Image Classification
-  % Then, there is a choice of representation, for example: Neural Network Weights
-  % Finally, there is a choice of optimization, for example: Gradient Methods
-  % I'll use this template to explain previous work, as well as my own.
-   \begin{columns}[T]
-      \begin{tabular}{ll}
-           {\Huge Problem}        &  \onslide<2->{\cb{\Huge Image Classification}}  \\
-           &\\
-           {\Huge Representation} & \onslide<3->{\cc{\Huge Network Weights}} \\
-           &\\
-           {\Huge Optimization}   & \onslide<4->{\ce{\Huge Gradient Methods}} \\
-      \end{tabular}
-  \end{columns}
-\end{frame}
-
-
-\begin{frame}[plain]{}
-  % That was an example of machine learning
-  % Now, consider the word Meta, as in Meta-learning.
-  % Reffering to itself, or to the conventions of its genre; *Self-Referential*
-  \centering
-  \vfill
-  \red{\fontsize{40}{50}\selectfont "Meta"}
-  \vfill
-  \Large Referring to itself or to the conventions of its genre; \cc{self-referential} \gr{(Wikipedia Definition)}
-\end{frame}
-
-\begin{frame}{AutoML-Zero: Evolving Machine Learning Algorithms From Scratch \white{\cite{real2020automl}}}
-  % AutoML-Zero, by Real et al, is an example of Meta-Learning.
-  % Instead of learning a task directly, it attempts to learn how to do machine learning.
-  % Also, it makes very few assumptions, and attempts to start from scratch.
-  %
-  % Consider how this fits into the approach template:
-  %   The subtask is image-classification on CIFAR-10, which is conventionally done
-  %     with a convolutional neural network.
-  %   To meta-learn how to do classification, this paper represents neural networks via a
-  %     **Tensor Register Machine**. This is their program representation.
-  %   This program representation is optimized via Regularized Evolution, which is 
-  %     an evolutionary algorithm.
-    \begin{vfilleditems}
-        \item \cb{\Huge Learns ML practices on CIFAR-10}
-        \vspace{0.7em}
-        \item \cc{\Huge Tensor register machine}
-        \vspace{0.7em}
-        \item \ce{\Huge Regularized Evolution}
-    \end{vfilleditems}
-\end{frame}
-
-\begin{frame}{Regularized Evolution}
+\begin{frame}{Regularized Evolution \color{white} \cite{real2019regularized}}
   % Regularized Evolution is a fast, stable method for population optimization.
   % Crucially, Regularized Evolution uses *aging*.
   % The population is represented as a queue, with young members at the start and old members at the end.
@@ -633,95 +603,69 @@
   % Eventually, a competitive modern classifier is evolved.
     \begin{figure}
         \centering
-        \includegraphics[scale=0.37]{figures/automl_zero_main_fig.png}
+        \only<1>{\includegraphics[scale=0.37]{figures/automl_zero_main_fig_blur_0.png}}
+        \only<2>{\includegraphics[scale=0.37]{figures/automl_zero_main_fig_blur_1.png}}
+        \only<3>{\includegraphics[scale=0.37]{figures/automl_zero_main_fig.png}}
     \end{figure}
 \end{frame}
 
 \begin{frame}{Environment Learning for Path-Planning}
-    \begin{vfilleditems}
-        \item \cb{\Huge Path Planning}
-        \vspace{0.7em}
-        \item \cc{\Huge Python Programs}
-        \vspace{0.7em}
-        \item \ce{\Huge Pareto Evolution}
-    \end{vfilleditems}
+    \begin{tabular}{ll}
+         {\Huge Problem}        &  \onslide<2->{\cb{\Huge Path Planning}}  \\
+         &\\
+         {\Huge Representation} & \onslide<3->{\cc{\Huge Python Code}} \\
+         &\\
+         {\Huge Optimization}   & \onslide<4->{\ce{\Huge Pareto Evolution}} \\
+    \end{tabular}
 \end{frame}
 
-% \begin{frame}{{\color{pureminimalistic@text@white} Multiple Objectives}}
-%   % Path Planning has multiple objectives.
-%   %   In the most basic form, these are the number of nodes considered, and the length of the eventual path.
-%   % However, other metrics, like exploration, can be relevant, but the main point 
-%   %   is that there are multiple objectives.
-%   % On the right is a plot, where each point is a computer program.
-%   % The x-axis is the number of nodes considered, 
-%   %   and the y-axis is the path length.
-%   % Each point is labeled with its *age*, or the iteration that it was found at.
-%   
-%   % The total array of points forms an interesting distribution, where no single point is perfect, and instead algorithms make trade-offs with one-another.
-%   \begin{columns}[T]
-%       \begin{column}{.4\linewidth}
-%           \emphasis{Nodes}
-%           \vspace{1em}
-%           \newline
-%           \emphasis{Path Length}
-%           \vspace{1em}
-%           \newline
-%           \emphasis{Exploration}
-%           \newline
-%           \vspace*{1em}
-%           \begin{center}
-%           \emphasis{\ldots }
-%           \end{center}
-%       \end{column}
-%       \begin{column}{.6\linewidth}
-%       \includegraphics[width=0.9\linewidth, keepaspectratio]{figures/total_overview.pdf}
-%       \end{column}
-%   \end{columns}
-% \end{frame}
-% 
-% \begin{frame}{Pareto Fronts}
-%   % These trade-offs are defined in the form of *Pareto Fronts*.
-%   
-%   % First, each algorithm is evaluated by a _fitness_,
-%   %   which is a vector because there are multiple objectives.
-%   % Pareto equivalence is defined by an ordering on fitness vectors.
-%   % If one fitness vector is not strictly superior in all elements,
-%   %   Then it is said to be Pareto-equivalent to another.
-%   % For example, v1 and v2 are Pareto-equivalent because while
-%   %   v1 has the shortest path, v2 considers fewer nodes.
-%   % In the same way, v3 is also pareto-equivalent
-%   % Because these three members are pareto-equivalent, they are placed in the first pareto front.
-%   % However, v4 is not, because v1 strictly outperforms it on both metrics.
-%   
-%   % These fronts are shown via the curves in this figure. 
-%   \begin{columns}[T]
-%       \begin{column}{.4\linewidth}
-%           \begin{vfilleditems}
-%               \item {\Large Vectorized Fitness}
-%               \begin{tabular}{ll}
-%               &  \\
-%               & {\Large $v_i = \{\red{nodes, path}\}$} \\
-%               &  \\
-%               \end{tabular}
-%               \item {\Large Pareto Equivalence}
-%               \begin{tabular}{ll}
-%               &  \\
-%               & {\Large $v_1 = \{\cc{80, 151}\}$} \\
-%               & {\Large $v_2 = \{\cc{60, 155}\}$} \\
-%               & {\Large $v_3 = \{\cc{50, 165}\}$} \\
-%               &  \\
-%               & {\Large $v_4 = \{\cb{130, 153}\}$} \\
-%               \end{tabular}
-%           \end{vfilleditems}
-%       \end{column}
-%       \begin{column}{.6\linewidth}
-%       \includegraphics[width=0.9\linewidth, keepaspectratio]{figures/total_pareto_overview.pdf}
-%       \end{column}
-%   \end{columns}
-% \end{frame}
+\begin{frame}[fragile]\frametitle{Evolvable Python Programs}
+  \begin{columns}
+      \begin{column}{.5\linewidth}
+          \includegraphics[width=1.0\linewidth]{figures/da_one_off.pdf}
+      \end{column}
+      \begin{column}{.5\linewidth}
+          \lstinputlisting[language=Python]{code_examples/rrt_over.py}
+      \end{column}
+  \end{columns}
+\end{frame}
 
 \begin{frame}[fragile]\frametitle{Evolvable Python Programs}
-  \lstinputlisting[language=Python]{code_examples/rrt_example.py}
+  \begin{columns}
+      \only<1>{
+      \begin{column}{.45\linewidth}
+      \lstinputlisting[language=Python]{code_examples/rrt_build.py}
+      \end{column}
+      \begin{column}{.55\linewidth}
+      \lstinputlisting[language=Python]{code_examples/rrt_sample.py}
+      \end{column}
+      }
+      \only<2>{
+      \begin{column}{.45\linewidth}
+      \lstinputlisting[language=Params]{code_examples/rrt_build.py}
+      \end{column}
+      \begin{column}{.55\linewidth}
+      \lstinputlisting[language=Params]{code_examples/rrt_sample.py}
+      \end{column}
+      }
+  \end{columns}
+  \onslide<2->{
+  \begin{table}[]
+      \centering
+      \begin{tabular}{l|llll}
+      \hline
+      \multicolumn{1}{c}{\bf MD5 Hash}  & 
+      \multicolumn{1}{c}{\bf \cb{\Large $\alpha$} (bias)}   &
+      \multicolumn{1}{c}{\bf \cb{\Large $r_0$   } (step)}   &
+      \multicolumn{1}{c}{\bf \cb{\Large $r_1$   } (rewire)} &
+      \multicolumn{1}{c}{\bf \cb{\Large $K$   } (nodes)}    \\
+      \hline
+      \plnr{$abcde$} & \cb{1.0} & \cb{50 } & \cb{100} & \cb{1000} \\
+      \plnr{$fghij$} & \cb{0.5} & \cb{100} & \cb{200} & \cb{1000} \\
+      \end{tabular}
+      \label{tab:params}
+  \end{table}
+  }
 \end{frame}
 
 \begin{frame}[fragile]\frametitle{Evolvable Python Grammar}
@@ -732,11 +676,82 @@
 \vspace{-0.1cm}
 \begin{figure}
     \centering
-    \includegraphics[height=0.9\textheight, keepaspectratio]{figures/iterative_mutation.png}
+    \includegraphics[height=0.8\textheight, keepaspectratio]{figures/iterative_mutation.png}
 \end{figure}
 \end{frame}
 
-\begin{frame}{Pareto Evolution}
+\begin{frame}{{\color{pureminimalistic@text@white} Multiple Objectives}}
+  % Path Planning has multiple objectives.
+  %   In the most basic form, these are the number of nodes considered, and the length of the eventual path.
+  % However, other metrics, like exploration, can be relevant, but the main point 
+  %   is that there are multiple objectives.
+  % On the right is a plot, where each point is a computer program.
+  % The x-axis is the number of nodes considered, 
+  %   and the y-axis is the path length.
+  % Each point is labeled with its *age*, or the iteration that it was found at.
+  
+  % The total array of points forms an interesting distribution, where no single point is perfect, and instead algorithms make trade-offs with one-another.
+  \begin{columns}[T]
+      \begin{column}{.4\linewidth}
+          \emphasis{Nodes}
+          \vspace{1em}
+          \newline
+          \emphasis{Path Length}
+          \vspace{1em}
+          \newline
+          \vspace*{1em}
+          \begin{center}
+          \emphasis{\ldots }
+          \end{center}
+      \end{column}
+      \begin{column}{.6\linewidth}
+      \includegraphics[width=0.9\linewidth, keepaspectratio]{figures/total_overview.pdf}
+      \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Pareto Fronts}
+  % These trade-offs are defined in the form of *Pareto Fronts*.
+  
+  % First, each algorithm is evaluated by a _fitness_,
+  %   which is a vector because there are multiple objectives.
+  % Pareto equivalence is defined by an ordering on fitness vectors.
+  % If one fitness vector is not strictly superior in all elements,
+  %   Then it is said to be Pareto-equivalent to another.
+  % For example, v1 and v2 are Pareto-equivalent because while
+  %   v1 has the shortest path, v2 considers fewer nodes.
+  % In the same way, v3 is also pareto-equivalent
+  % Because these three members are pareto-equivalent, they are placed in the first pareto front.
+  % However, v4 is not, because v1 strictly outperforms it on both metrics.
+  
+  % These fronts are shown via the curves in this figure. 
+  \begin{columns}[T]
+      \begin{column}{.4\linewidth}
+          \begin{vfilleditems}
+              \item {\Large Vectorized Fitness}
+              \begin{tabular}{ll}
+              &  \\
+              & {\Large $v_i = \{\red{nodes, path}\}$} \\
+              &  \\
+              \end{tabular}
+              \item {\Large Pareto Equivalence}
+              \begin{tabular}{ll}
+              &  \\
+              & {\Large $v_1 = \{\cc{80, 151}\}$} \\
+              & {\Large $v_2 = \{\cc{60, 155}\}$} \\
+              & {\Large $v_3 = \{\cc{50, 165}\}$} \\
+              &  \\
+              & {\Large $v_4 = \{\cb{130, 153}\}$} \\
+              \end{tabular}
+          \end{vfilleditems}
+      \end{column}
+      \begin{column}{.6\linewidth}
+      \includegraphics[width=0.9\linewidth, keepaspectratio]{figures/total_pareto_overview.pdf}
+      \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Pareto Evolution \color{white}(\cite{srinivas1994muiltiobjective})}
     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/paretoev.pdf}
 \end{frame}
 
@@ -782,12 +797,8 @@
   \end{center}
 \end{frame}
 
-\begin{frame}{Population Dynamics: Starcraft Engima}
-  % Here is an example of the population dynamics of an optimization run.
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/pheno.pdf}
-\end{frame}
 
-\begin{frame}{Specialization Results}
+\begin{frame}{Specialization Experiment}
     % Here are the results of specializing algorithms to particular maps.
     % This experiment looked at five different scenarios:
     %   Milan, Italy, which is a relatively cluttered map
@@ -796,7 +807,7 @@
     % The main experiment used three starcraft maps: Enigma, Turbo, and Entanglement.
     % More starcraft maps have been used in other experiments
     \centering
-    \includegraphics[width=0.8\linewidth, keepaspectratio]{figures/show_maps_exp.pdf}
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/show_maps_exp.pdf}
 \end{frame}
 
 \begin{frame}{Specialization Results}
@@ -814,7 +825,7 @@
     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned_split_0.pdf}
 \end{frame}
 
-\begin{frame}{Enigma/Entangle. Convergent Evolution}
+\begin{frame}{Enigma \& Entanglement Best}
     % Next, there is the best planner on the Enigma map, planner 49980, on the left. 
     % This planner biases towards the goal 13% of the time, and considers 75% fewer nodes than the baseline planner.
     % MOST significantly, this planner is exactly the same as planner c5b4f, which
@@ -827,58 +838,12 @@
     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned_split_1.pdf}
 \end{frame}
 
-\begin{frame}{49980 Validation Example}
-    % Here is a quick validation run showing how a single attempt differed from the initial baseline.
-    % Essentially, it considers fewer nodes and stops early.
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned_split_2.pdf}
-\end{frame}
-
 \begin{frame}{Turbo and No-Obstacles}
     % Alternatively, the Turbo planner learns to bias towards the goal roughly half the time, presumably because the space is so open.
     % Finally, the blank map planner learns to bias 89% of the time, because the open map allows it to do so.
     % This acted as a control for the other experiments
     % These results were the first preliminary indication that goal-specialization was succeeding.
     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/learned_split_3.pdf}
-\end{frame}
-
-
-\begin{frame}{Blank Validation}
-    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/blank_val.pdf}
-\end{frame}
-
-% \begin{frame}{Milan Validation}
-%     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/milan_val.pdf}
-% \end{frame}
-% 
-% \begin{frame}{Baldur's Gate Validation}
-%     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/baldurs_val.pdf}
-% \end{frame}
-
-{
-\setbeamercolor{background canvas}{bg=white}
-\begin{frame}[plain]
-  % As a reminder, here is an artists depiction of the tree of life
-  %   Ideally, we're able to evolve robots, or computer programs, in the same way.
-  \begin{figure}
-  \centering
-  \includegraphics[width=1.0\linewidth,keepaspectratio]{figures/tree_of_life.png}
-  \end{figure}
-  \begin{center}
-      \emphasis{Natural evolution}
-  \end{center}
-\end{frame}
-}
-
-\begin{frame}[plain]
-  % So, for instance, how did planner 49980 evolve?
-  % This figure shows the ancestry tree for the Starcraft Enigma experiment.
-  \begin{figure}
-  \centering
-  \includegraphics[width=1.0\linewidth,keepaspectratio]{figures/tree.pdf}
-  \end{figure}
-  \begin{center}
-  \emphasis{Evolved Computer Programs}
-  \end{center}
 \end{frame}
 
 
@@ -919,25 +884,76 @@ No Obstacles & \cc{$89.47$\%} & $1$ & \plnr{70458}  & \gr{$50$} & \cb{$1/9$} \\
 \end{table}
 \end{frame}
 
-\begin{frame}{Efficient Exploration}
-    \centering
-    \includegraphics[width=0.85\linewidth, keepaspectratio]{figures/efficient_overview.pdf}
+{
+\setbeamercolor{background canvas}{bg=white}
+\begin{frame}[plain]
+  % As a reminder, here is an artists depiction of the tree of life
+  %   Ideally, we're able to evolve robots, or computer programs, in the same way.
+  \begin{figure}
+  \centering
+  \includegraphics[width=1.0\linewidth,keepaspectratio]{figures/tree_of_life.png}
+  \end{figure}
+  \begin{center}
+      \emphasis{Natural evolution}
+  \end{center}
+\end{frame}
+}
+
+\begin{frame}[plain]
+  % So, for instance, how did planner 49980 evolve?
+  % This figure shows the ancestry tree for the Starcraft Enigma experiment.
+  \begin{figure}
+  \centering
+  \includegraphics[width=1.0\linewidth,keepaspectratio]{figures/tree.pdf}
+  \end{figure}
+  \begin{center}
+  \emphasis{Evolved Computer Programs}
+  \end{center}
 \end{frame}
 
-\begin{frame}{\white{Experiment Types}}
-    \begin{vfilleditems}
-    \item \emphasis{Improve}
-    \item \emphasis{Select}
-    \item \emphasis{Fix}
-    \end{vfilleditems}
+\begin{frame}{Population Dynamics: Blank Map}
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/blank_pheno.pdf}
+\end{frame}
+
+\begin{frame}{Population Dynamics: Entanglement}
+  % Here is an example of the population dynamics of an optimization run.
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/tangle_pheno.pdf}
+\end{frame}
+
+\begin{frame}{Population Dynamics: Starcraft Enigma}
+  % Here is an example of the population dynamics of an optimization run.
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/pheno.pdf}
 \end{frame}
 
 \begin{frame}{\white{Future Work}}
-    \begin{vfilleditems}
-    \item \emphasis{Algorithms} 
-    \item \emphasis{Environments} 
-    \item \emphasis{Optimization} 
-    \end{vfilleditems}
+  \begin{columns}[T]
+      \begin{column}{.5\linewidth}
+        \emphasis{Algorithms} 
+        \begin{itemize}
+            \onslide<2->{\item Advanced Route Planning}
+            \onslide<2->{\item Advanced Sampling}
+        \end{itemize}
+        \vspace{0.5em}
+        \emphasis{Environments} 
+        \begin{itemize}
+            \onslide<3->{\item High-Dimensions}
+        \end{itemize}
+        \vspace{0.5em}
+        \emphasis{Optimization} 
+        \begin{itemize}
+            \onslide<4->{
+            \item Alt. Pareto Evolution
+            }
+        \end{itemize}
+      \end{column}
+      \begin{column}{.5\linewidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=0.9\linewidth, keepaspectratio]{figures/lavalle.png}
+            \caption{\red{\cite{lavalle2006planning}}}
+        \end{figure}
+      \end{column}
+  \end{columns}
 \end{frame}
 
 \begin{frame}{Program Learning Template}
@@ -978,18 +994,52 @@ Path Planning    & Python Program          & Pareto Evolution \\
     \vfill
     % But *BECAUSE* there is no free lunch,
     %   Meta-learning and specialization are possible.
-    \onslide<2->{\cb{MetaLearning and Specialization}}
+    \onslide<2->{\ce{Meta learning and specialization}}
 \end{frame}
 
 \appendix % do not count the following slides for the total number
 \section*{Backup Slides}
 
-\begin{frame}[plain, noframenumbering]
-  \centering
-  \vfill
-  {\fontsize{40}{50}\selectfont Questions?}
-  \vfill
+\begin{frame}[plain]{}
+\centering
+\vfill
+{\fontsize{40}{50}\selectfont \red{Questions?}}
+\vfill
+\begin{figure}
+    \centering
+    \begin{overpic}[width=0.45\linewidth, keepaspectratio]{figures/meme4.jpg}
+        \put(-40,35){\Medium Wait, it's all}
+        \put(-40,28){\Medium program}
+        \put(-40,21){\Medium learning?}
+        \put(105,30){\Medium \red{Always has been.}}
+    \end{overpic}
+\end{figure}
 \end{frame}
+
+\begin{frame}{Efficient Exploration}
+    \centering
+    \includegraphics[width=0.85\linewidth, keepaspectratio]{figures/efficient_overview.pdf}
+\end{frame}
+
+\begin{frame}{Baldur's Gate Validation}
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/baldurs_val.pdf}
+\end{frame}
+
+\begin{frame}{Blank Validation}
+    \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/blank_val.pdf}
+\end{frame}
+
+% \begin{frame}{Milan Validation}
+%     \includegraphics[width=1.0\linewidth, keepaspectratio]{figures/milan_val.pdf}
+% \end{frame}
+
+% \begin{frame}{\white{Experiment Types}}
+%     \begin{vfilleditems}
+%     \item \emphasis{Improve}
+%     \item \emphasis{Select}
+%     \item \emphasis{Fix}
+%     \end{vfilleditems}
+% \end{frame}
 
 % \begin{frame}{Research Questions}
 %   \begin{vfilleditems}
